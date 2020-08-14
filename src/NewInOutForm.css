@@ -1,7 +1,12 @@
-.NewInOutForm .control {
-    text-align: left;
+.NewInOutForm .field {
+    /* text-align: left; */
     width: 45%;
     margin-right: 5%;
+}
+
+.NewInOutForm label {
+    font-weight: lighter;
+    font-size: 0.8rem;
 }
 
 .NewInOutForm input {

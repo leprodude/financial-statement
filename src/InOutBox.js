@@ -49,6 +49,11 @@ function InOutBox({ title, data, add, remove, edit }) {
     </tr>
   ));
 
+  const totalAmount = data.reduce(
+    (total, d) => (d.amount !== undefined ? total + Number(d.amount) : total),
+    0
+  );
+
   return (
     <>
       <Columns.Column size="6" className="has-background-white">
@@ -57,11 +62,7 @@ function InOutBox({ title, data, add, remove, edit }) {
             <Tag.Group gapless>
               <Tag color="black">{title}</Tag>
               <Tag color={title === "Expense" ? "danger" : "success"}>
-                {data.reduce(
-                  (total, d) =>
-                    d.amount !== undefined ? total + Number(d.amount) : total,
-                  0
-                )}
+                {totalAmount}
               </Tag>
             </Tag.Group>
           </Columns.Column>
@@ -73,6 +74,8 @@ function InOutBox({ title, data, add, remove, edit }) {
             <FontAwesomeIcon icon={faPlus} size="xs" />
           </Columns.Column>
         </Columns>
+
+        {data.length !== 0 &&
         <Container className="has-background-grey-lighter mb-4">
           <Table>
             <thead>
@@ -84,6 +87,7 @@ function InOutBox({ title, data, add, remove, edit }) {
             <tbody>{entries}</tbody>
           </Table>
         </Container>
+        }
 
         <Modal
           show={showModal}
@@ -103,6 +107,7 @@ function InOutBox({ title, data, add, remove, edit }) {
                   title={title}
                   entry={entry}
                   add={add}
+                  remove={remove}
                   edit={edit}
                   closeModal={closeModal}
                   isEditing={isEditing}
