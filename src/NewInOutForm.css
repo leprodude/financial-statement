@@ -1,0 +1,14 @@
+.NewInOutForm .control {
+    text-align: left;
+    width: 45%;
+    margin-right: 5%;
+}
+
+.NewInOutForm input {
+    width: 100%;
+    height: 100%;
+}
+
+.NewInOutForm button.submit {
+    margin-top: 2em;
+}
