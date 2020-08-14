@@ -14,11 +14,23 @@ import {
 } from "react-bulma-components";
 import NewInOutForm from "./NewInOutForm.js";
 
-function InOutBox({ title, data, add, remove, edit }) {
+function InOutBox({
+  title,
+  data,
+  add,
+  remove,
+  edit,
+  style,
+  size = 6,
+  isIncome,
+  isExpense,
+  isAsset,
+  isLiability,
+}) {
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
-  const [entry, setEntry] = useState({ name: "", amount: "", id: "" });
+  const [entry, setEntry] = useState({});
 
   const addEntry = () => {
     setIsEditing(false);
@@ -33,7 +45,7 @@ function InOutBox({ title, data, add, remove, edit }) {
 
   const closeModal = () => {
     setShowModal(false);
-    setEntry("");
+    setEntry({});
   };
 
   const entries = data.map((entry) => (
@@ -43,8 +55,10 @@ function InOutBox({ title, data, add, remove, edit }) {
       }}
     >
       <td>{entry.name}</td>
-      <td className={title === "Expense" && "has-text-danger"}>
-        {entry.amount}
+      <td className={(isExpense || isLiability) && "has-text-danger"}>
+        {(isIncome || isExpense) && entry.amount}
+        {isAsset && entry.cost}
+        {isLiability && entry.principal}
       </td>
     </tr>
   ));
@@ -56,13 +70,17 @@ function InOutBox({ title, data, add, remove, edit }) {
 
   return (
     <>
-      <Columns.Column size="6" className="has-background-white">
+      <Columns.Column
+        size={size}
+        className="has-background-white"
+        style={style}
+      >
         <Columns className="is-mobile">
           <Columns.Column size="10" className="has-text-left">
             <Tag.Group gapless>
               <Tag color="black">{title}</Tag>
-              <Tag color={title === "Expense" ? "danger" : "success"}>
-                {totalAmount}
+              <Tag color={isExpense || isLiability ? "danger" : "success"}>
+                {(isIncome || isExpense) && totalAmount}
               </Tag>
             </Tag.Group>
           </Columns.Column>
@@ -75,19 +93,23 @@ function InOutBox({ title, data, add, remove, edit }) {
           </Columns.Column>
         </Columns>
 
-        {data.length !== 0 &&
-        <Container className="has-background-grey-lighter mb-4">
-          <Table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Amount</th>
-              </tr>
-            </thead>
-            <tbody>{entries}</tbody>
-          </Table>
-        </Container>
-        }
+        {data.length !== 0 && (
+          <Container className="has-background-grey-lighter mb-4">
+            <Table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>
+                    {(isIncome || isExpense) && "Amount"}
+                    {isAsset && "Cost"}
+                    {isLiability && "Principal"}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>{entries}</tbody>
+            </Table>
+          </Container>
+        )}
 
         <Modal
           show={showModal}
@@ -100,7 +122,7 @@ function InOutBox({ title, data, add, remove, edit }) {
               <Container>
                 <Heading size={5} renderAs="p">
                   {isEditing ? "Edit " : "New "}
-                  {title === "Expense" ? "Expense" : "Income"}
+                  {title}
                 </Heading>
 
                 <NewInOutForm
@@ -111,6 +133,10 @@ function InOutBox({ title, data, add, remove, edit }) {
                   edit={edit}
                   closeModal={closeModal}
                   isEditing={isEditing}
+                  isIncome={isIncome}
+                  isExpense={isExpense}
+                  isAsset={isAsset}
+                  isLiability={isLiability}
                 />
               </Container>
             </Section>

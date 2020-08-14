@@ -5,11 +5,7 @@ import InOutBox from "./InOutBox.js";
 import "./FinancialStatement.css";
 import "./Icons.css";
 import "react-bulma-components/dist/react-bulma-components.min.css";
-import {
-  Section,
-  Columns,
-} from "react-bulma-components";
-
+import { Section, Columns } from "react-bulma-components";
 
 function FinancialStatement() {
   const initialIncomes = [
@@ -20,19 +16,52 @@ function FinancialStatement() {
     { name: "Lebenskosten", amount: 2000, id: uuidv4() },
     { name: "Spaß", amount: 200, id: uuidv4() },
   ];
+  const initialAssets = [
+    {
+      name: "Campervan",
+      cost: 40000,
+      downpay: 40000,
+      cashflow: 400,
+      id: uuidv4(),
+    },
+    {
+      name: "Wohnung",
+      cost: 80000,
+      downpay: 20000,
+      cashflow: 350,
+      id: uuidv4(),
+    },
+  ];
+  const initialLiabilities = [
+    {
+      name: "Car loans",
+      principal: 11000,
+      interest: 0.05,
+      id: uuidv4(),
+    },
+  ];
 
-  const [ incomes, addIncome, removeIncome, editIncome ] = useFinancialState(
+  const [incomes, addIncome, removeIncome, editIncome] = useFinancialState(
     initialIncomes
   );
   const [expenses, addExpense, removeExpense, editExpense] = useFinancialState(
     initialExpenses
   );
+  const [assets, addAsset, removeAsset, editAsset] = useFinancialState(
+    initialAssets
+  );
+  const [liabilities, addLiability, removeLiability, editLiability] = useFinancialState(
+    initialLiabilities
+  );
+
+
   return (
     <>
       <Section className="has-background-white-ter hero is-fullheight">
         <Columns centered breakpoint="tablet">
           <InOutBox
             title="Income"
+            isIncome
             data={incomes}
             add={addIncome}
             remove={removeIncome}
@@ -41,10 +70,31 @@ function FinancialStatement() {
           <Columns.Column size="full"></Columns.Column>
           <InOutBox
             title="Expense"
+            isExpense
             data={expenses}
             add={addExpense}
             remove={removeExpense}
             edit={editExpense}
+          ></InOutBox>
+          <Columns.Column size="full"></Columns.Column>
+          <InOutBox
+            title="Asset"
+            isAsset
+            data={assets}
+            add={addAsset}
+            remove={removeAsset}
+            edit={editAsset}
+            style={{ marginRight: "2rem" }}
+            size={5}
+          ></InOutBox>
+          <InOutBox
+            title="Liability"
+            isLiability
+            data={liabilities}
+            add={addLiability}
+            remove={removeLiability}
+            edit={editLiability}
+            size={5}
           ></InOutBox>
         </Columns>
       </Section>
@@ -53,27 +103,3 @@ function FinancialStatement() {
 }
 
 export default FinancialStatement;
-
-
-
-//        assets: [
-//         {
-//           name: "Campervan",
-//           cost: 40000,
-//           downpay: 40000,
-//           cashflow: 400,
-//         },
-//         {
-//           name: "Wohnung",
-//           cost: 80000,
-//           downpay: 20000,
-//           cashflow: 350,
-//         },
-//       ],
-//       liabilities: [
-//         {
-//           name: "Kredit Wohnung",
-//           principal: 60000,
-//           interest: 0.05,
-//         },
-//       ],

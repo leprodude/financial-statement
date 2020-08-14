@@ -4,25 +4,26 @@ import { v4 as uuidv4 } from "uuid";
 export default (initialFinancials) => {
   const [financials, setFinancials] = useState(initialFinancials);
 
-  const addFinancial = (name, amount) => {
+  const addFinancial = (newFinancial) => {
     setFinancials([
       ...financials,
       {
-        name: name,
-        amount: amount,
         id: uuidv4(),
+        // destructuring only uses arguments that get passed in
+        // different for income/asset/liability --> makes it awesomely general
+        ...newFinancial, 
       },
     ]);
   };
-  
+
   const removeFinancial = (id) => {
     setFinancials(financials.filter((f) => f.id !== id));
   };
-  
-  const editFinancial = (id, newName, newAmount) => {
+
+  const editFinancial = (editedFinancial) => {
     setFinancials(
-      financials.map((f) =>
-        f.id === id ? { ...f, name: newName, amount: newAmount } : f
+      financials.map((financial) =>
+        financial.id === editedFinancial.id ? { ...editedFinancial } : financial
       )
     );
   };
