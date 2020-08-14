@@ -1,66 +1,36 @@
-import React, { Component } from "react";
-import { v4 as uuidv4 } from "uuid";
+import React from "react";
+import useInputState from "./hooks/useInputState";
 import "./NewInOutForm.css";
-import {
-  Button,
-  Modal,
-  Field,
-  Control,
-  Label,
-  Input,
-} from "react-bulma-components";
 
-class NewInOutForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: this.props.entry.name,
-      amount: this.props.entry.amount,
-      id: this.props.entry.id,
-      isEditing: this.props.isEditing
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+function NewInOutForm({ title, entry, add, edit, closeModal, isEditing }) {
+  const [name, handleChangeName, resetName] = useInputState(entry.name);
+  const [amount, handleChangeAmount, resetAmount] = useInputState(entry.amount);
+  const [id, handleChangeId, resetId] = useInputState(entry.id);
 
-  handleChange(evt) {
-    const value = evt.target.value;
-    this.setState({
-      [evt.target.name]: value,
-    });
-  }
-
-  handleSubmit(evt) {
+  const handleSubmit = (evt) => {
     evt.preventDefault();
-
-    const { name, amount, id, isEditing } = this.state;
-    if(isEditing){
-      this.props.update(id, {name: name, amount:amount, id:id});
-    }else{
-      this.props.add({ name: name, amount: Number(amount), id: (id || uuidv4()) });
-    }
-
-    this.setState({ name: "", amount: "", id:"", isEditing:false });
-    this.props.close();
+    isEditing ? edit(id, name, amount) : add(name, amount);
+    closeModal();
   }
 
-  render() {
-    const { name, amount, id, isEditing } = this.state;
-    const isIncome = this.props.title === "Income";
-    return (
-      <form className="NewInOutForm" onSubmit={this.handleSubmit}>
+  return (
+    <>
+      <form
+        className="NewInOutForm"
+        onSubmit={handleSubmit}
+      >
         <div className="control is-inline-block">
           <input
             type="text"
-              placeholder={
-            isIncome
-              ? "Job Title / Source of Income"
-              : "Expense Name"
-              }
+            placeholder={
+              title === "Expense"
+                ? "Expense Name"
+                : "Job Title / Source of Income"
+            }
             id="name"
             name="name"
-              value={name}
-            onChange={this.handleChange}
+            value={name}
+            onChange={handleChangeName}
             autoFocus
           />
         </div>
@@ -70,18 +40,18 @@ class NewInOutForm extends Component {
             placeholder="e.g. 2000"
             id="amount"
             name="amount"
-              value={amount}
-            onChange={this.handleChange}
+            value={amount}
+            onChange={handleChangeAmount}
           />
         </div>
         <div className="control">
           <button className="button submit is-dark is-small">
-            {isEditing ? "Edit" : "Add" } {isIncome ? "Income" : "Expense"}
+            {isEditing ? "Edit" : "Add"} {title === "Expense" ? "Expense" : "Income"}
           </button>
         </div>
       </form>
-    );
-  }
+    </>
+  );
 }
 
 export default NewInOutForm;

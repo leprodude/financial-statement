@@ -1,79 +1,62 @@
-import React, { Component } from "react";
+import React from "react";
+import { useState } from "react";
 import "./InOutBox.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCoffee,
-  faCheckSquare,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import {
   Heading,
   Columns,
   Container,
   Table,
-  Icon,
   Tag,
   Modal,
   Section,
-  Button,
-  Field,
-  Label,
-  Control,
-  Input,
-  Form,
 } from "react-bulma-components";
 import NewInOutForm from "./NewInOutForm.js";
 
-class InOutBox extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      show: false,
-      entry: { name: "", amount: "", id:"" },
-      isEditing: false
-    };
-    this.open = this.open.bind(this);
-    this.close = this.close.bind(this);
-    // this.add = this.add.bind(this);
-  }
+function InOutBox({ title, data, add, remove, edit }) {
+  const [showModal, setShowModal] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
-//   open() {
-//     this.setState({ show: true });
-//   }
-  open(entry, isEditing) {
-    this.setState({ show: true, entry: entry, isEditing: isEditing });
-  }
-  close() {
-    this.setState({ show: false });
-  }
+  const [entry, setEntry] = useState({ name: "", amount: "", id: "" });
 
-  //   handleChange(){
+  const addEntry = () => {
+    setIsEditing(false);
+    setShowModal(true);
+  };
 
-  //   }
+  const editEntry = (entry) => {
+    setEntry(entry);
+    setIsEditing(true);
+    setShowModal(true);
+  };
 
-  //   handleSubmit(){
+  const closeModal = () => {
+    setShowModal(false);
+    setEntry("");
+  };
 
-  //   }
+  const entries = data.map((entry) => (
+    <tr
+      onClick={() => {
+        editEntry(entry);
+      }}
+    >
+      <td>{entry.name}</td>
+      <td className={title === "Expense" && "has-text-danger"}>
+        {entry.amount}
+      </td>
+    </tr>
+  ));
 
-  render() {
-    const { title, data, add, update } = this.props;
-
-    const entries = data.map((entry) => (
-      <tr onClick={this.open.bind(this, entry, true)}>
-        <td>{entry.name}</td>
-        <td className={title === "Expenses" ? "has-text-danger" : {}}>
-          {entry.amount}
-        </td>
-      </tr>
-    ));
-
-    return (
+  return (
+    <>
       <Columns.Column size="6" className="has-background-white">
         <Columns className="is-mobile">
           <Columns.Column size="10" className="has-text-left">
             <Tag.Group gapless>
               <Tag color="black">{title}</Tag>
-              <Tag color={title === "Expenses" ? "danger" : "success"}>
+              <Tag color={title === "Expense" ? "danger" : "success"}>
                 {data.reduce(
                   (total, d) =>
                     d.amount !== undefined ? total + Number(d.amount) : total,
@@ -85,11 +68,7 @@ class InOutBox extends Component {
           <Columns.Column
             className="InOutBox-hover has-text-right"
             size="2"
-            onClick={this.open.bind(
-              this,
-              { name: "", amount: "", id: "" },
-              false
-            )}
+            onClick={addEntry}
           >
             <FontAwesomeIcon icon={faPlus} size="xs" />
           </Columns.Column>
@@ -107,8 +86,8 @@ class InOutBox extends Component {
         </Container>
 
         <Modal
-          show={this.state.show}
-          onClose={this.close}
+          show={showModal}
+          onClose={closeModal}
           closeOnBlur={true}
           showClose={false}
         >
@@ -116,40 +95,25 @@ class InOutBox extends Component {
             <Section style={{ backgroundColor: "white" }}>
               <Container>
                 <Heading size={5} renderAs="p">
-                  {this.state.isEditing ? "Edit " : "New "}
-                  {title === "Expenses" ? "Expense" : "Income"}
+                  {isEditing ? "Edit " : "New "}
+                  {title === "Expense" ? "Expense" : "Income"}
                 </Heading>
 
                 <NewInOutForm
                   title={title}
+                  entry={entry}
                   add={add}
-                  update={update}
-                  close={this.close}
-                  entry={this.state.entry}
-                  isEditing={this.state.isEditing}
+                  edit={edit}
+                  closeModal={closeModal}
+                  isEditing={isEditing}
                 />
               </Container>
-              {/* <Form>
-
-              <Field>
-                <Label>Name</Label>
-                <Control>
-                  <Input
-                    // onChange={this.handleChange}
-                    name="name"
-                    type="text"
-                    placeholder="Job Title / Source of Income"
-                    // value={name}
-                    />
-                </Control>
-              </Field>
-                    </Form> */}
             </Section>
           </Modal.Content>
         </Modal>
       </Columns.Column>
-    );
-  }
+    </>
+  );
 }
 
 export default InOutBox;
