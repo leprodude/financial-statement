@@ -37,6 +37,7 @@ function NewInOutForm({ title, entry, add, remove, edit, closeModal, isEditing }
               name="name"
               value={name}
               onChange={handleChangeName}
+              required
               autoFocus
             />
           </div>
@@ -48,11 +49,13 @@ function NewInOutForm({ title, entry, add, remove, edit, closeModal, isEditing }
           <div className="control">
             <input
               type="text"
+              pattern="[0-9]{0,5}"
               placeholder="e.g. 2000"
               id="amount"
               name="amount"
               value={amount}
               onChange={handleChangeAmount}
+              required
             />
           </div>
         </div>
@@ -68,7 +71,10 @@ function NewInOutForm({ title, entry, add, remove, edit, closeModal, isEditing }
         {isEditing && (
           <div class="field is-inline-block">
             <div className="control has-text-right">
-              <button onClick={handleRemove} className="button submit is-danger is-small">
+              <button
+                onClick={handleRemove}
+                className="button submit is-danger is-small"
+              >
                 Delete {title === "Expense" ? "Expense" : "Income"}
               </button>
             </div>
