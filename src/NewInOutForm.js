@@ -39,7 +39,6 @@ function NewInOutForm({
     switch (title) {
       case "Income":
       case "Expense":
-        console.log("in Income Expense title switch: " + title, name, amount);
         isEditing ? edit({id, name, amount}) : add({name, amount});
         break;
       case "Asset":

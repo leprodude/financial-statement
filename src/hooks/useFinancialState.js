@@ -1,8 +1,8 @@
-import { useState } from "react";
+import useLocalStorageState from "./useLocalStorageState";
 import { v4 as uuidv4 } from "uuid";
 
-export default (initialFinancials) => {
-  const [financials, setFinancials] = useState(initialFinancials);
+export default (key, initialFinancials) => {
+  const [financials, setFinancials] = useLocalStorageState(key, initialFinancials);
 
   const addFinancial = (newFinancial) => {
     setFinancials([

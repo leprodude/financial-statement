@@ -41,19 +41,18 @@ function FinancialStatement() {
     },
   ];
 
-  const [incomes, addIncome, removeIncome, editIncome] = useFinancialState(
+  const [incomes, addIncome, removeIncome, editIncome] = useFinancialState("incomes",
     initialIncomes
   );
-  const [expenses, addExpense, removeExpense, editExpense] = useFinancialState(
+  const [expenses, addExpense, removeExpense, editExpense] = useFinancialState("expenses",
     initialExpenses
   );
-  const [assets, addAsset, removeAsset, editAsset] = useFinancialState(
+  const [assets, addAsset, removeAsset, editAsset] = useFinancialState("assets",
     initialAssets
   );
-  const [liabilities, addLiability, removeLiability, editLiability] = useFinancialState(
+  const [liabilities, addLiability, removeLiability, editLiability] = useFinancialState("liabilities",
     initialLiabilities
   );
-
 
   return (
     <>
