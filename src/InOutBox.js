@@ -1,5 +1,6 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useContext } from "react";
+import { FinancialsContext } from "./contexts/FinancialsContext";
+import { FormContext } from "./contexts/FormContext";
 import "./InOutBox.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -15,53 +16,48 @@ import {
 import NewInOutForm from "./NewInOutForm.js";
 
 function InOutBox({
-  title,
-  data,
-  add,
-  remove,
-  edit,
+  financials,
   style,
   size = 6,
-  isIncome,
-  isExpense,
-  isAsset,
-  isLiability,
 }) {
-  const [showModal, setShowModal] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
+  const { incomes, expenses, assets, liabilities } = useContext(
+    FinancialsContext
+  );
 
-  const [entry, setEntry] = useState({});
+  const { showModal, toggleShowModal, entry, setEntry } = useContext(
+    FormContext
+  );
 
-  const addEntry = () => {
-    setIsEditing(false);
-    setShowModal(true);
+  const { type, data, add, remove, edit } = financials;
+  
+  const getEntries = function (financials) {
+    const type = financials.type;
+    const entries = financials.data.map((entry) => (
+      <tr
+        onClick={() => {
+            setEntry({ ...entry, type });
+            toggleShowModal();
+        }}
+      >
+        <td>{entry.name}</td>
+        <td
+          className={
+            (financials.type === "expense" ||
+              financials.type === "liability") &&
+            "has-text-danger"
+          }
+        >
+          {(financials.type === "income" || financials.type === "expense") &&
+            entry.amount}
+          {financials.type === "asset" && entry.cost}
+          {financials.type === "liability" && entry.principal}
+        </td>
+      </tr>
+    ));
+    return entries;
   };
 
-  const editEntry = (entry) => {
-    setEntry(entry);
-    setIsEditing(true);
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setEntry({});
-  };
-
-  const entries = data.map((entry) => (
-    <tr
-      onClick={() => {
-        editEntry(entry);
-      }}
-    >
-      <td>{entry.name}</td>
-      <td className={(isExpense || isLiability) && "has-text-danger"}>
-        {(isIncome || isExpense) && entry.amount}
-        {isAsset && entry.cost}
-        {isLiability && entry.principal}
-      </td>
-    </tr>
-  ));
+  const entries = [...getEntries(financials)];
 
   const totalAmount = data.reduce(
     (total, d) => (d.amount !== undefined ? total + Number(d.amount) : total),
@@ -78,16 +74,28 @@ function InOutBox({
         <Columns className="is-mobile">
           <Columns.Column size="10" className="has-text-left">
             <Tag.Group gapless>
-              <Tag color="black">{title}</Tag>
-              <Tag color={isExpense || isLiability ? "danger" : "success"}>
-                {(isIncome || isExpense) && totalAmount}
+              <Tag color="black">{type}</Tag>
+              <Tag
+                color={
+                  type === "expense" ||
+                  type === "liability"
+                    ? "danger"
+                    : "success"
+                }
+              >
+                {(type === "income" ||
+                  type === "expense") &&
+                  totalAmount}
               </Tag>
             </Tag.Group>
           </Columns.Column>
           <Columns.Column
             className="InOutBox-hover has-text-right"
             size="2"
-            onClick={addEntry}
+            onClick={() => {
+              setEntry({ type });
+              toggleShowModal();
+            }}
           >
             <FontAwesomeIcon icon={faPlus} size="xs" />
           </Columns.Column>
@@ -100,9 +108,11 @@ function InOutBox({
                 <tr>
                   <th>Name</th>
                   <th>
-                    {(isIncome || isExpense) && "Amount"}
-                    {isAsset && "Cost"}
-                    {isLiability && "Principal"}
+                    {(type === "income" ||
+                      type === "expense") &&
+                      "Amount"}
+                    {type === "asset" && "Cost"}
+                    {type === "liability" && "Principal"}
                   </th>
                 </tr>
               </thead>
@@ -113,7 +123,10 @@ function InOutBox({
 
         <Modal
           show={showModal}
-          onClose={closeModal}
+          onClose={() => {
+            setEntry({});
+            toggleShowModal();
+          }}
           closeOnBlur={true}
           showClose={false}
         >
@@ -121,23 +134,11 @@ function InOutBox({
             <Section style={{ backgroundColor: "white" }}>
               <Container>
                 <Heading size={5} renderAs="p">
-                  {isEditing ? "Edit " : "New "}
-                  {title}
+                  {entry.id ? "Edit " : "New "}
+                  {entry.type}
                 </Heading>
 
-                <NewInOutForm
-                  title={title}
-                  entry={entry}
-                  add={add}
-                  remove={remove}
-                  edit={edit}
-                  closeModal={closeModal}
-                  isEditing={isEditing}
-                  isIncome={isIncome}
-                  isExpense={isExpense}
-                  isAsset={isAsset}
-                  isLiability={isLiability}
-                />
+                <NewInOutForm/>
               </Container>
             </Section>
           </Modal.Content>

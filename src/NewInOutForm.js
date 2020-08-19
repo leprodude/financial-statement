@@ -1,21 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import useInputState from "./hooks/useInputState";
+import { FinancialsContext } from "./contexts/FinancialsContext";
+import { FormContext } from "./contexts/FormContext";
 import NumberInput from "./NumberInput";
 import "./NewInOutForm.css";
 
-function NewInOutForm({
-  title,
-  entry,
-  add,
-  remove,
-  edit,
-  closeModal,
-  isEditing,
-  isIncome,
-  isExpense,
-  isAsset,
-  isLiability,
-}) {
+function NewInOutForm() {
+  const { incomes, expenses, assets, liabilities } = useContext(
+    FinancialsContext
+  );
+  const { showModal, toggleShowModal, entry, setEntry } = useContext(
+    FormContext
+  );
+  const {type} = entry;
+  const isEditing = entry.id !== undefined;
+
   const [name, handleChangeName, resetName] = useInputState(entry.name);
   const [amount, handleChangeAmount, resetAmount] = useInputState(entry.amount);
   const [cost, handleChangeCost, resetCost] = useInputState(entry.cost);
@@ -36,31 +35,56 @@ function NewInOutForm({
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    switch (title) {
-      case "Income":
-      case "Expense":
-        isEditing ? edit({id, name, amount}) : add({name, amount});
-        break;
-      case "Asset":
+    switch (type) {
+      case "income":
         isEditing
-          ? edit({id, name, cost, downpay, cashflow})
-          : add({name, cost, downpay, cashflow});
+          ? incomes.edit({ id, name, amount })
+          : incomes.add({ name, amount });
         break;
-      case "Liability":
+      case "expense":
         isEditing
-          ? edit({id, name, principal, interest})
-          : add({name, principal, interest});
+          ? expenses.edit({ id, name, amount })
+          : expenses.add({ name, amount });
         break;
-      default: console.log("Title does not match Income/Expense/Asset/Liability...");
+      case "asset":
+        isEditing
+          ? assets.edit({ id, name, cost, downpay, cashflow })
+          : assets.add({ name, cost, downpay, cashflow });
+        break;
+      case "liability":
+        isEditing
+          ? liabilities.edit({ id, name, principal, interest })
+          : liabilities.add({ name, principal, interest });
+        break;
+      default:
+        console.log("Title does not match Income/Expense/Asset/Liability...");
     }
 
-    closeModal();
+    toggleShowModal();
   };
 
   const handleRemove = (evt) => {
     evt.preventDefault();
-    remove(id);
-    closeModal();
+
+    switch (type) {
+      case "income":
+        incomes.remove(entry.id);
+        break;
+      case "expense":
+        expenses.remove(entry.id);
+        break;
+      case "asset":
+       assets.remove(entry.id);
+        break;
+      case "liability":
+        liabilities.remove(entry.id);
+        break;
+      default:
+        console.log("Title does not match Income/Expense/Asset/Liability...");
+    }
+
+
+    toggleShowModal();
   };
 
   return (
@@ -72,7 +96,7 @@ function NewInOutForm({
           <div className="control">
             <input
               type="text"
-              placeholder={title}
+              placeholder={type}
               id="name"
               name="name"
               value={name}
@@ -83,7 +107,7 @@ function NewInOutForm({
           </div>
         </div>
 
-        {(isIncome || isExpense) && (
+        {(type === "income" || type === "expense") && (
           <NumberInput
             label={"Amount"}
             name={"amount"}
@@ -92,7 +116,7 @@ function NewInOutForm({
           />
         )}
 
-        {isAsset && (
+        {type === "asset" && (
           <>
             <NumberInput
               label="Cost"
@@ -115,7 +139,7 @@ function NewInOutForm({
           </>
         )}
 
-        {isLiability && (
+        {type === "liability" && (
           <>
             <NumberInput
               label="Principal"
@@ -138,7 +162,7 @@ function NewInOutForm({
         <div class="field is-inline-block">
           <div className="control">
             <button className="button submit is-dark is-small">
-              {isEditing ? "Edit" : "Add"} {title}
+              {isEditing ? "Edit" : "Add"} {type}
             </button>
           </div>
         </div>
@@ -149,7 +173,7 @@ function NewInOutForm({
                 onClick={handleRemove}
                 className="button submit is-danger is-small"
               >
-                Delete {title}
+                Delete {type}
               </button>
             </div>
           </div>

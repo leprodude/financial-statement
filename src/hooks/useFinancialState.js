@@ -2,7 +2,10 @@ import useLocalStorageState from "./useLocalStorageState";
 import { v4 as uuidv4 } from "uuid";
 
 export default (key, initialFinancials) => {
-  const [financials, setFinancials] = useLocalStorageState(key, initialFinancials);
+  const [financials, setFinancials] = useLocalStorageState(
+    key,
+    initialFinancials
+  );
 
   const addFinancial = (newFinancial) => {
     setFinancials([
@@ -11,7 +14,7 @@ export default (key, initialFinancials) => {
         id: uuidv4(),
         // destructuring only uses arguments that get passed in
         // different for income/asset/liability --> makes it awesomely general
-        ...newFinancial, 
+        ...newFinancial,
       },
     ]);
   };
@@ -28,5 +31,12 @@ export default (key, initialFinancials) => {
     );
   };
 
-  return [financials, addFinancial, removeFinancial, editFinancial];
+  //   return [financials, addFinancial, removeFinancial, editFinancial];
+  return {
+    type: key,
+    data: financials,
+    add: addFinancial,
+    remove: removeFinancial,
+    edit: editFinancial,
+  };
 };
