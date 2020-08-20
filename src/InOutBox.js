@@ -15,11 +15,7 @@ import {
 } from "react-bulma-components";
 import NewInOutForm from "./NewInOutForm.js";
 
-function InOutBox({
-  financials,
-  style,
-  size = 6,
-}) {
+function InOutBox({ financials, style, size = 6 }) {
   const { incomes, expenses, assets, liabilities } = useContext(
     FinancialsContext
   );
@@ -29,14 +25,14 @@ function InOutBox({
   );
 
   const { type, data, add, remove, edit } = financials;
-  
-  const getEntries = function (financials) {
+
+  const getEntries = function (financials, columnData) {
     const type = financials.type;
     const entries = financials.data.map((entry) => (
       <tr
         onClick={() => {
-            setEntry({ ...entry, type });
-            toggleShowModal();
+          setEntry({ ...entry, type });
+          toggleShowModal();
         }}
       >
         <td>{entry.name}</td>
@@ -47,22 +43,47 @@ function InOutBox({
             "has-text-danger"
           }
         >
-          {(financials.type === "income" || financials.type === "expense") &&
-            entry.amount}
-          {financials.type === "asset" && entry.cost}
-          {financials.type === "liability" && entry.principal}
+          {entry[columnData]}
         </td>
       </tr>
     ));
     return entries;
   };
 
-  const entries = [...getEntries(financials)];
+  const getTotal = function (financials, columnData) {
+    const type = financials.type;
+    const total = financials.data.reduce(
+      (total, d) =>
+        d[columnData] !== undefined ? total + Number(d[columnData]) : total,
+      0
+    );
+    return total;
+  };
 
-  const totalAmount = data.reduce(
-    (total, d) => (d.amount !== undefined ? total + Number(d.amount) : total),
-    0
-  );
+  let entries;
+  if (type === "income") {
+    entries = [
+      ...getEntries(incomes, "amount"),
+      ...getEntries(assets, "cashflow"),
+    ];
+  }
+  if (type === "expense") {
+    entries = [
+      ...getEntries(expenses, "amount"),
+      ...getEntries(liabilities, "monthly"),
+    ];
+  }
+  if (type === "asset") {
+    entries = [...getEntries(assets, "cost")];
+  }
+  if (type === "liability") {
+    entries = [...getEntries(liabilities, "principal")];
+  }
+
+  // const totalAmount = data.reduce(
+  //   (total, d) => (d.amount !== undefined ? total + Number(d.amount) : total),
+  //   0
+  // );
 
   return (
     <>
@@ -77,15 +98,17 @@ function InOutBox({
               <Tag color="black">{type}</Tag>
               <Tag
                 color={
-                  type === "expense" ||
-                  type === "liability"
+                  type === "expense" || type === "liability"
                     ? "danger"
                     : "success"
                 }
               >
-                {(type === "income" ||
-                  type === "expense") &&
-                  totalAmount}
+                {/* {(type === "income" || type === "expense") && totalAmount} */}
+                {type === "income" &&
+                  getTotal(incomes, "amount") + getTotal(assets, "cashflow")}
+                {type === "expense" &&
+                  getTotal(expenses, "amount") +
+                    getTotal(liabilities, "monthly")}
               </Tag>
             </Tag.Group>
           </Columns.Column>
@@ -108,9 +131,7 @@ function InOutBox({
                 <tr>
                   <th>Name</th>
                   <th>
-                    {(type === "income" ||
-                      type === "expense") &&
-                      "Amount"}
+                    {(type === "income" || type === "expense") && "Amount"}
                     {type === "asset" && "Cost"}
                     {type === "liability" && "Principal"}
                   </th>
@@ -138,7 +159,7 @@ function InOutBox({
                   {entry.type}
                 </Heading>
 
-                <NewInOutForm/>
+                <NewInOutForm />
               </Container>
             </Section>
           </Modal.Content>

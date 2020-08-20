@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import useInputState from "./hooks/useInputState";
 import { FinancialsContext } from "./contexts/FinancialsContext";
 import { FormContext } from "./contexts/FormContext";
@@ -12,7 +12,7 @@ function NewInOutForm() {
   const { showModal, toggleShowModal, entry, setEntry } = useContext(
     FormContext
   );
-  const {type} = entry;
+  const { type } = entry;
   const isEditing = entry.id !== undefined;
 
   const [name, handleChangeName, resetName] = useInputState(entry.name);
@@ -30,6 +30,8 @@ function NewInOutForm() {
   const [interest, handleChangeInterest, resetInterest] = useInputState(
     entry.interest
   );
+const [monthly, setMonthly] = useState(entry.monthly);
+
   const [id, handleChangeId, resetId] = useInputState(entry.id);
 
   const handleSubmit = (evt) => {
@@ -53,8 +55,19 @@ function NewInOutForm() {
         break;
       case "liability":
         isEditing
-          ? liabilities.edit({ id, name, principal, interest })
-          : liabilities.add({ name, principal, interest });
+          ? liabilities.edit({
+              id,
+              name,
+              principal,
+              interest,
+              monthly: Number(((principal * interest) / 12).toFixed(2)),
+            })
+          : liabilities.add({
+              name,
+              principal,
+              interest,
+              monthly: Number(((principal * interest) / 12).toFixed(2)),
+            });
         break;
       default:
         console.log("Title does not match Income/Expense/Asset/Liability...");
@@ -74,7 +87,7 @@ function NewInOutForm() {
         expenses.remove(entry.id);
         break;
       case "asset":
-       assets.remove(entry.id);
+        assets.remove(entry.id);
         break;
       case "liability":
         liabilities.remove(entry.id);
@@ -82,7 +95,6 @@ function NewInOutForm() {
       default:
         console.log("Title does not match Income/Expense/Asset/Liability...");
     }
-
 
     toggleShowModal();
   };
@@ -155,7 +167,17 @@ function NewInOutForm() {
               value={interest}
               onChange={handleChangeInterest}
             />
-            <NumberInput visible={false} />
+            <div class="field is-inline-block">
+              <label class="label">
+                Monthly
+              </label>
+
+              <div className="control">
+                <label class="label">
+                  {(principal && interest) ? Number(((principal * interest) / 12).toFixed(2)) : "0"}
+                </label>
+              </div>
+            </div>
           </>
         )}
 

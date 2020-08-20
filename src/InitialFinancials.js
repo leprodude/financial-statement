@@ -29,6 +29,7 @@ const initialLiabilities = [
     name: "Car loans",
     principal: 11000,
     interest: 0.05,
+    monthly: 0,
     id: uuidv4(),
   },
 ];

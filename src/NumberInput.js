@@ -2,6 +2,7 @@ import React from "react";
 
 export default ({
   visible = true,
+  disabled = false,
   label,
   pattern = "[0-9]{0,7}",
   placeholder = "e.g. 2000",
@@ -24,6 +25,7 @@ export default ({
               value={value}
               onChange={onChange}
               required
+              disabled={disabled}
             />
           </div>
         </>
