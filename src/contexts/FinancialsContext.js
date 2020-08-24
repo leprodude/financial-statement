@@ -1,29 +1,26 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useReducer } from "react";
+import FinancialsReducer from "../reducers/FinancialsReducer";
 import {
   initialIncomes,
   initialExpenses,
   initialAssets,
   initialLiabilities,
 } from "../InitialFinancials.js";
-import useFinancialState from "../hooks/useFinancialState.js";
 
 export const FinancialsContext = createContext();
 
 export function FinancialsProvider(props) {
-    const incomes = useFinancialState("income", initialIncomes);
-    const expenses = useFinancialState("expense", initialExpenses);
-    const assets = useFinancialState("asset", initialAssets);
-    const liabilities = useFinancialState("liability", initialLiabilities);
+
+  const [financials, dispatch] = useReducer(FinancialsReducer, {
+    income: initialIncomes,
+    expense: initialExpenses,
+    asset: initialAssets,
+    liability: initialLiabilities,
+  });
 
   return (
-    <FinancialsContext.Provider value={{ incomes, expenses, assets, liabilities }}>
+    <FinancialsContext.Provider value={{ financials, dispatch }}>
       {props.children}
     </FinancialsContext.Provider>
   );
 }
-
-// export const withFinancialsContext = (Component) => (props) => (
-//   <FinancialsContext.Consumer>
-//     {(value) => <Component financialsContext={{ ...this.state }} {...props} />}
-//   </FinancialsContext.Consumer>
-// );

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import useInputState from "./hooks/useInputState";
 import { FinancialsContext } from "./contexts/FinancialsContext";
 import { FormContext } from "./contexts/FormContext";
@@ -6,67 +6,84 @@ import NumberInput from "./NumberInput";
 import "./NewInOutForm.css";
 
 function NewInOutForm() {
-  const { incomes, expenses, assets, liabilities } = useContext(
-    FinancialsContext
-  );
-  const { showModal, toggleShowModal, entry, setEntry } = useContext(
-    FormContext
-  );
-  const { type } = entry;
+  const { dispatch } = useContext(FinancialsContext);
+
+  const { toggleShowModal, entry } = useContext(FormContext);
+  const { financialType } = entry;
   const isEditing = entry.id !== undefined;
 
-  const [name, handleChangeName, resetName] = useInputState(entry.name);
-  const [amount, handleChangeAmount, resetAmount] = useInputState(entry.amount);
-  const [cost, handleChangeCost, resetCost] = useInputState(entry.cost);
-  const [downpay, handleChangeDownpay, resetDownpay] = useInputState(
-    entry.downpay
-  );
-  const [cashflow, handleChangeCashflow, resetCashflow] = useInputState(
-    entry.cashflow
-  );
-  const [principal, handleChangePrincipal, resetPrincipal] = useInputState(
-    entry.principal
-  );
-  const [interest, handleChangeInterest, resetInterest] = useInputState(
-    entry.interest
-  );
-const [monthly, setMonthly] = useState(entry.monthly);
+  const [name, handleChangeName] = useInputState(entry.name);
+  const [amount, handleChangeAmount] = useInputState(entry.amount);
+  const [cost, handleChangeCost] = useInputState(entry.cost);
+  const [downpay, handleChangeDownpay] = useInputState(entry.downpay);
+  const [cashflow, handleChangeCashflow] = useInputState(entry.cashflow);
+  const [principal, handleChangePrincipal] = useInputState(entry.principal);
+  const [interest, handleChangeInterest] = useInputState(entry.interest);
 
-  const [id, handleChangeId, resetId] = useInputState(entry.id);
+  const [id] = useInputState(entry.id);
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    switch (type) {
+    switch (financialType) {
       case "income":
-        isEditing
-          ? incomes.edit({ id, name, amount })
-          : incomes.add({ name, amount });
-        break;
       case "expense":
         isEditing
-          ? expenses.edit({ id, name, amount })
-          : expenses.add({ name, amount });
+          ? dispatch({
+              type: "EDIT",
+              financialType: financialType,
+              editedFinancial: { id, name, amount },
+            })
+          : dispatch({
+              type: "ADD",
+              financialType: financialType,
+              newFinancial: {
+                name,
+                amount,
+              },
+            });
         break;
       case "asset":
         isEditing
-          ? assets.edit({ id, name, cost, downpay, cashflow })
-          : assets.add({ name, cost, downpay, cashflow });
+          ? dispatch({
+              type: "EDIT",
+              financialType: financialType,
+              editedFinancial: {
+                id,
+                name,
+                cost,
+                downpay,
+                cashflow,
+              },
+            })
+          : dispatch({
+              type: "ADD",
+              financialType: financialType,
+              newFinancial: { name, cost, downpay, cashflow },
+            });
         break;
       case "liability":
         isEditing
-          ? liabilities.edit({
-              id,
-              name,
-              principal,
-              interest,
-              monthly: Number(((principal * interest) / 12).toFixed(2)),
+          ? dispatch({
+              type: "EDIT",
+              financialType: financialType,
+              editedFinancial: {
+                id,
+                name,
+                principal,
+                interest,
+                monthly: Number(((principal * interest) / 12).toFixed(2)),
+              },
             })
-          : liabilities.add({
-              name,
-              principal,
-              interest,
-              monthly: Number(((principal * interest) / 12).toFixed(2)),
+          : dispatch({
+              type: "ADD",
+              financialType: financialType,
+              newFinancial: {
+                name,
+                principal,
+                interest,
+                monthly: Number(((principal * interest) / 12).toFixed(2)),
+              },
             });
         break;
       default:
@@ -78,24 +95,7 @@ const [monthly, setMonthly] = useState(entry.monthly);
 
   const handleRemove = (evt) => {
     evt.preventDefault();
-
-    switch (type) {
-      case "income":
-        incomes.remove(entry.id);
-        break;
-      case "expense":
-        expenses.remove(entry.id);
-        break;
-      case "asset":
-        assets.remove(entry.id);
-        break;
-      case "liability":
-        liabilities.remove(entry.id);
-        break;
-      default:
-        console.log("Title does not match Income/Expense/Asset/Liability...");
-    }
-
+    dispatch({ type: "REMOVE", financialType: financialType, id: id });
     toggleShowModal();
   };
 
@@ -108,7 +108,7 @@ const [monthly, setMonthly] = useState(entry.monthly);
           <div className="control">
             <input
               type="text"
-              placeholder={type}
+              placeholder={financialType}
               id="name"
               name="name"
               value={name}
@@ -119,7 +119,7 @@ const [monthly, setMonthly] = useState(entry.monthly);
           </div>
         </div>
 
-        {(type === "income" || type === "expense") && (
+        {(financialType === "income" || financialType === "expense") && (
           <NumberInput
             label={"Amount"}
             name={"amount"}
@@ -128,7 +128,7 @@ const [monthly, setMonthly] = useState(entry.monthly);
           />
         )}
 
-        {type === "asset" && (
+        {financialType === "asset" && (
           <>
             <NumberInput
               label="Cost"
@@ -151,7 +151,7 @@ const [monthly, setMonthly] = useState(entry.monthly);
           </>
         )}
 
-        {type === "liability" && (
+        {financialType === "liability" && (
           <>
             <NumberInput
               label="Principal"
@@ -168,13 +168,13 @@ const [monthly, setMonthly] = useState(entry.monthly);
               onChange={handleChangeInterest}
             />
             <div class="field is-inline-block">
-              <label class="label">
-                Monthly
-              </label>
+              <label class="label">Monthly</label>
 
               <div className="control">
                 <label class="label">
-                  {(principal && interest) ? Number(((principal * interest) / 12).toFixed(2)) : "0"}
+                  {principal && interest
+                    ? Number(((principal * interest) / 12).toFixed(2))
+                    : "0"}
                 </label>
               </div>
             </div>
@@ -184,7 +184,7 @@ const [monthly, setMonthly] = useState(entry.monthly);
         <div class="field is-inline-block">
           <div className="control">
             <button className="button submit is-dark is-small">
-              {isEditing ? "Edit" : "Add"} {type}
+              {isEditing ? "Edit" : "Add"} {financialType}
             </button>
           </div>
         </div>
@@ -195,7 +195,7 @@ const [monthly, setMonthly] = useState(entry.monthly);
                 onClick={handleRemove}
                 className="button submit is-danger is-small"
               >
-                Delete {type}
+                Delete {financialType}
               </button>
             </div>
           </div>

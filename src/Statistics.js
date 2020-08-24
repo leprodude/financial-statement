@@ -1,7 +1,8 @@
 import React from "react";
 
 export default function Statistics(props) {
-    const {history, location, match} = {...props};
+    // const {history, location, match} = {...props};
+    const { match} = {...props};
     const name = match.params.name;
   return (
     <div>

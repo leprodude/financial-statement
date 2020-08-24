@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { FinancialsContext } from "./contexts/FinancialsContext";
 import { FormContext } from "./contexts/FormContext";
 import "./InOutBox.css";
@@ -15,31 +15,28 @@ import {
 } from "react-bulma-components";
 import NewInOutForm from "./NewInOutForm.js";
 
-function InOutBox({ financials, style, size = 6 }) {
-  const { incomes, expenses, assets, liabilities } = useContext(
-    FinancialsContext
-  );
+function InOutBox({ financialType, style, size = 6 }) {
+
+  const { financials } = useContext(FinancialsContext);
 
   const { showModal, toggleShowModal, entry, setEntry } = useContext(
     FormContext
   );
 
-  const { type, data, add, remove, edit } = financials;
+  const getEntries = function (financialType, columnData) {
 
-  const getEntries = function (financials, columnData) {
-    const type = financials.type;
-    const entries = financials.data.map((entry) => (
+    const entries = financials[financialType].map((entry) => (
       <tr
         onClick={() => {
-          setEntry({ ...entry, type });
+          setEntry({ ...entry, financialType });
           toggleShowModal();
         }}
       >
         <td>{entry.name}</td>
         <td
           className={
-            (financials.type === "expense" ||
-              financials.type === "liability") &&
+            (financialType === "expense" ||
+              financialType === "liability") &&
             "has-text-danger"
           }
         >
@@ -50,9 +47,9 @@ function InOutBox({ financials, style, size = 6 }) {
     return entries;
   };
 
-  const getTotal = function (financials, columnData) {
-    const type = financials.type;
-    const total = financials.data.reduce(
+  const getTotal = function (financialType, columnData) {
+
+    const total = financials[financialType].reduce(
       (total, d) =>
         d[columnData] !== undefined ? total + Number(d[columnData]) : total,
       0
@@ -61,29 +58,24 @@ function InOutBox({ financials, style, size = 6 }) {
   };
 
   let entries;
-  if (type === "income") {
+  if (financialType === "income") {
     entries = [
-      ...getEntries(incomes, "amount"),
-      ...getEntries(assets, "cashflow"),
+      ...getEntries("income", "amount"),
+      ...getEntries("asset", "cashflow"),
     ];
   }
-  if (type === "expense") {
+  if (financialType === "expense") {
     entries = [
-      ...getEntries(expenses, "amount"),
-      ...getEntries(liabilities, "monthly"),
+      ...getEntries("expense", "amount"),
+      ...getEntries("liability", "monthly"),
     ];
   }
-  if (type === "asset") {
-    entries = [...getEntries(assets, "cost")];
+  if (financialType === "asset") {
+    entries = [...getEntries("asset", "cost")];
   }
-  if (type === "liability") {
-    entries = [...getEntries(liabilities, "principal")];
+  if (financialType === "liability") {
+    entries = [...getEntries("liability", "principal")];
   }
-
-  // const totalAmount = data.reduce(
-  //   (total, d) => (d.amount !== undefined ? total + Number(d.amount) : total),
-  //   0
-  // );
 
   return (
     <>
@@ -95,20 +87,20 @@ function InOutBox({ financials, style, size = 6 }) {
         <Columns className="is-mobile">
           <Columns.Column size="10" className="has-text-left">
             <Tag.Group gapless>
-              <Tag color="black">{type}</Tag>
+              <Tag color="black">{financialType}</Tag>
               <Tag
                 color={
-                  type === "expense" || type === "liability"
+                  financialType === "expense" || financialType === "liability"
                     ? "danger"
                     : "success"
                 }
               >
-                {/* {(type === "income" || type === "expense") && totalAmount} */}
-                {type === "income" &&
-                  getTotal(incomes, "amount") + getTotal(assets, "cashflow")}
-                {type === "expense" &&
-                  getTotal(expenses, "amount") +
-                    getTotal(liabilities, "monthly")}
+                {financialType === "income" &&
+                  getTotal("income", "amount") +
+                    getTotal("asset", "cashflow")}
+                {financialType === "expense" &&
+                  getTotal("expense", "amount") +
+                    getTotal("liability", "monthly")}
               </Tag>
             </Tag.Group>
           </Columns.Column>
@@ -116,7 +108,7 @@ function InOutBox({ financials, style, size = 6 }) {
             className="InOutBox-hover has-text-right"
             size="2"
             onClick={() => {
-              setEntry({ type });
+              setEntry({ financialType });
               toggleShowModal();
             }}
           >
@@ -124,16 +116,18 @@ function InOutBox({ financials, style, size = 6 }) {
           </Columns.Column>
         </Columns>
 
-        {data.length !== 0 && (
+        {financials[financialType].length !== 0 && (
           <Container className="has-background-grey-lighter mb-4">
             <Table>
               <thead>
                 <tr>
                   <th>Name</th>
                   <th>
-                    {(type === "income" || type === "expense") && "Amount"}
-                    {type === "asset" && "Cost"}
-                    {type === "liability" && "Principal"}
+                    {(financialType === "income" ||
+                      financialType === "expense") &&
+                      "Amount"}
+                    {financialType === "asset" && "Cost"}
+                    {financialType === "liability" && "Principal"}
                   </th>
                 </tr>
               </thead>
@@ -156,7 +150,7 @@ function InOutBox({ financials, style, size = 6 }) {
               <Container>
                 <Heading size={5} renderAs="p">
                   {entry.id ? "Edit " : "New "}
-                  {entry.type}
+                  {entry.financialType}
                 </Heading>
 
                 <NewInOutForm />
