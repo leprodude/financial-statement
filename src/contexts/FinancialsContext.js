@@ -8,9 +8,9 @@ import {
 } from "../InitialFinancials.js";
 
 export const FinancialsContext = createContext();
+export const DispatchContext = createContext();
 
 export function FinancialsProvider(props) {
-
   const [financials, dispatch] = useReducer(FinancialsReducer, {
     income: initialIncomes,
     expense: initialExpenses,
@@ -19,8 +19,8 @@ export function FinancialsProvider(props) {
   });
 
   return (
-    <FinancialsContext.Provider value={{ financials, dispatch }}>
-      {props.children}
+    <FinancialsContext.Provider value={financials}>
+      <DispatchContext.Provider value={dispatch}>{props.children}</DispatchContext.Provider>
     </FinancialsContext.Provider>
   );
 }

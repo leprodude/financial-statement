@@ -17,7 +17,7 @@ import NewInOutForm from "./NewInOutForm.js";
 
 function InOutBox({ financialType, style, size = 6 }) {
 
-  const { financials } = useContext(FinancialsContext);
+  const financials = useContext(FinancialsContext);
 
   const { showModal, toggleShowModal, entry, setEntry } = useContext(
     FormContext

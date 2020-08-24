@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import useInputState from "./hooks/useInputState";
-import { FinancialsContext } from "./contexts/FinancialsContext";
+import { DispatchContext } from "./contexts/FinancialsContext";
 import { FormContext } from "./contexts/FormContext";
 import NumberInput from "./NumberInput";
 import "./NewInOutForm.css";
 
 function NewInOutForm() {
-  const { dispatch } = useContext(FinancialsContext);
+  const dispatch = useContext(DispatchContext);
 
   const { toggleShowModal, entry } = useContext(FormContext);
   const { financialType } = entry;
