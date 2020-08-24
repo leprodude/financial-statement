@@ -24,6 +24,18 @@
   color: white;
 }
 
+.App-nav {
+  width: 50%;
+  display: flex;
+  margin: 1rem auto;
+  justify-content: space-around;
+}
+
+.active-link {
+  color: pink;
+  border-bottom: 1px solid black;
+}
+
 .App-link {
   color: #61dafb;
 }
