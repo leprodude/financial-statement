@@ -38,7 +38,7 @@ function App() {
               render={(routeProps) => <Statistics {...routeProps} />}
             />
             <Route exact path="/contact" component={Contact} />
-            <Route render={() => <h1>ERRROTT NOT FOUND</h1>} />
+            <Route render={() => <h1>ERROR NOT FOUND</h1>} />
           </Switch>
         </FormProvider>
       </FinancialsProvider>

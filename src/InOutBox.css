@@ -6,3 +6,11 @@
 .InOutBox-passive-tag {
     margin-left: 1rem;
 }
+
+.InOutBox .title {
+    padding: 0 2.5%;
+}
+
+.InOutBox-close-modal:hover {
+    cursor: pointer;
+}

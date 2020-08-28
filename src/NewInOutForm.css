@@ -1,7 +1,6 @@
 .NewInOutForm .field {
-    /* text-align: left; */
     width: 45%;
-    margin-right: 5%;
+    margin: 0 2.5%;
 }
 
 .NewInOutForm label {

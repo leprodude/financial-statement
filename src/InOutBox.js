@@ -153,9 +153,17 @@ function InOutBox({ financialType, style, size = 6 }) {
           <Modal.Content>
             <Section style={{ backgroundColor: "white" }}>
               <Container>
-                <Heading size={5} renderAs="p">
+                <Heading size={5} renderAs="p" style={{ padding: "0 2.5%" }}>
                   {entry.id ? "Edit " : "New "}
                   {entry.financialType}
+                  <Tag
+                    remove
+                    className="InOutBox-close-modal is-pulled-right"
+                    onClick={() => {
+                      setEntry({});
+                      toggleShowModal();
+                    }}
+                  ></Tag>
                 </Heading>
 
                 <NewInOutForm />
