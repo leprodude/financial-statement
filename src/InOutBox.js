@@ -16,7 +16,6 @@ import {
 import NewInOutForm from "./NewInOutForm.js";
 
 function InOutBox({ financialType, style, size = 6 }) {
-
   const financials = useContext(FinancialsContext);
 
   const { showModal, toggleShowModal, entry, setEntry } = useContext(
@@ -24,7 +23,6 @@ function InOutBox({ financialType, style, size = 6 }) {
   );
 
   const getEntries = function (financialType, columnData) {
-
     const entries = financials[financialType].map((entry) => (
       <tr
         onClick={() => {
@@ -33,11 +31,18 @@ function InOutBox({ financialType, style, size = 6 }) {
         }}
         className="InOutBox-hover"
       >
-        <td>{entry.name}</td>
+        <td>
+          {entry.name}
+          {columnData === "cashflow" && (
+            <Tag className="InOutBox-passive-tag is-success is-light">passive</Tag>
+          )}
+          {columnData === "monthly" && (
+            <Tag className="InOutBox-passive-tag is-danger is-light">liability</Tag>
+          )}
+        </td>
         <td
           className={
-            (financialType === "expense" ||
-              financialType === "liability") &&
+            (financialType === "expense" || financialType === "liability") &&
             "has-text-danger"
           }
         >
@@ -49,7 +54,6 @@ function InOutBox({ financialType, style, size = 6 }) {
   };
 
   const getTotal = function (financialType, columnData) {
-
     const total = financials[financialType].reduce(
       (total, d) =>
         d[columnData] !== undefined ? total + Number(d[columnData]) : total,
@@ -97,8 +101,7 @@ function InOutBox({ financialType, style, size = 6 }) {
                 }
               >
                 {financialType === "income" &&
-                  getTotal("income", "amount") +
-                    getTotal("asset", "cashflow")}
+                  getTotal("income", "amount") + getTotal("asset", "cashflow")}
                 {financialType === "expense" &&
                   getTotal("expense", "amount") +
                     getTotal("liability", "monthly")}
@@ -108,7 +111,7 @@ function InOutBox({ financialType, style, size = 6 }) {
           <Columns.Column
             className="InOutBox-hover has-text-center"
             size="1"
-            style={{width:"48px"}}
+            style={{ width: "48px" }}
             onClick={() => {
               setEntry({ financialType });
               toggleShowModal();
