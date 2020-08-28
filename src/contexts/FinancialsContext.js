@@ -12,12 +12,6 @@ export const FinancialsContext = createContext();
 export const DispatchContext = createContext();
 
 export function FinancialsProvider(props) {
-  // const [financials, dispatch] = useReducer(FinancialsReducer, {
-  //   income: initialIncomes,
-  //   expense: initialExpenses,
-  //   asset: initialAssets,
-  //   liability: initialLiabilities,
-  // });
   const [financials, dispatch] = useLocalStorageReducer(
     "financials",
     {

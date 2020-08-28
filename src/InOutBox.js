@@ -31,6 +31,7 @@ function InOutBox({ financialType, style, size = 6 }) {
           setEntry({ ...entry, financialType });
           toggleShowModal();
         }}
+        className="InOutBox-hover"
       >
         <td>{entry.name}</td>
         <td
@@ -85,7 +86,7 @@ function InOutBox({ financialType, style, size = 6 }) {
         style={style}
       >
         <Columns className="is-mobile">
-          <Columns.Column size="10" className="has-text-left">
+          <Columns.Column size="auto" className="has-text-left">
             <Tag.Group gapless>
               <Tag color="black">{financialType}</Tag>
               <Tag
@@ -105,8 +106,9 @@ function InOutBox({ financialType, style, size = 6 }) {
             </Tag.Group>
           </Columns.Column>
           <Columns.Column
-            className="InOutBox-hover has-text-right"
-            size="2"
+            className="InOutBox-hover has-text-center"
+            size="1"
+            style={{width:"48px"}}
             onClick={() => {
               setEntry({ financialType });
               toggleShowModal();

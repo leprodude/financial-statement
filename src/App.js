@@ -11,7 +11,7 @@ import "./App.css";
 function App() {
   return (
     <div className="App">
-      <nav className="App-nav">
+      {/* <nav className="App-nav">
         <NavLink exact activeClassName="active-link" to="/">
           Financial Statement
         </NavLink>
@@ -21,7 +21,7 @@ function App() {
         <NavLink exact activeClassName="active-link" to="/contact">
           Contact
         </NavLink>
-      </nav>
+      </nav> */}
       <FinancialsProvider>
         <FormProvider>
           <Switch>

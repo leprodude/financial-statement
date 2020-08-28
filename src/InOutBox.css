@@ -1,3 +1,4 @@
-.InOutBox-hover:hover {
+.InOutBox-hover:hover, .table.is-striped tbody tr:not(.is-selected):nth-child(2n):hover {
     cursor: pointer;
+    background-color: #f5f5f5;
 }
