@@ -1,6 +1,6 @@
 import { useReducer, useEffect } from "react";
 
-function useLocalStorageReducer(key, defaultVal, reducer) {
+function useLocalStorageReducer<S, A>(key: string, defaultVal: string, reducer: (state: S, action: A) => S): [S, React.Dispatch<A>] {
   const [state, dispatch] = useReducer(reducer, defaultVal, () => {
     let val;
     try {

@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
-import { FinancialsContext } from "./contexts/FinancialsContext";
+import { FinancialsContext} from "./contexts/FinancialsContext";
+import { FinancialType, Financial } from "./FinancialTypes";
 import { FormContext } from "./contexts/FormContext";
+import NewInOutForm from "./NewInOutForm";
 import "./InOutBox.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -12,22 +14,31 @@ import {
   Tag,
   Modal,
   Section,
+  //@ts-ignore
 } from "react-bulma-components";
-import NewInOutForm from "./NewInOutForm.js";
 
-function InOutBox({ financialType, style, size = 6 }) {
+
+interface InOutBoxProps {
+  financialType: FinancialType,
+  style: Object,
+  size: number
+}
+
+
+const InOutBox: React.FC<InOutBoxProps> = ({ financialType, style, size = 6 }) => {
+
   const financials = useContext(FinancialsContext);
 
   const { showModal, toggleShowModal, entry, setEntry } = useContext(
     FormContext
   );
 
-  const getEntries = function (financialType, columnData) {
-    const entries = financials[financialType].map((entry) => (
+  const getEntries = function (financialType: FinancialType, columnData: string) {
+    const entries = (financials[financialType] as Financial[]).map((entry) => (
       <tr
         onClick={() => {
-          setEntry({ ...entry, financialType });
-          toggleShowModal();
+          setEntry!({ ...entry });
+          toggleShowModal!();
         }}
         className="InOutBox-hover"
       >
@@ -42,44 +53,44 @@ function InOutBox({ financialType, style, size = 6 }) {
         </td>
         <td
           className={
-            (financialType === "expense" || financialType === "liability") &&
-            "has-text-danger"
+            (financialType === "expense" || financialType === "liability") ?
+            "has-text-danger" : undefined
           }
         >
-          {entry[columnData]}
+          {entry[columnData as keyof Financial]}
         </td>
       </tr>
     ));
     return entries;
   };
 
-  const getTotal = function (financialType, columnData) {
-    const total = financials[financialType].reduce(
+  const getTotal = function (financialType: FinancialType, columnData:string) {
+    const total = (financials[financialType] as Financial[]).reduce(
       (total, d) =>
-        d[columnData] !== undefined ? total + Number(d[columnData]) : total,
+        d[columnData as keyof Financial] !== undefined ? total + Number(d[columnData as keyof Financial]) : total,
       0
     );
     return total;
   };
 
   let entries;
-  if (financialType === "income") {
+  if (financialType === FinancialType.INCOME) {
     entries = [
-      ...getEntries("income", "amount"),
-      ...getEntries("asset", "cashflow"),
+      ...getEntries(FinancialType.INCOME, "amount"),
+      ...getEntries(FinancialType.ASSET, "cashflow"),
     ];
   }
-  if (financialType === "expense") {
+  if (financialType === FinancialType.EXPENSE) {
     entries = [
-      ...getEntries("expense", "amount"),
-      ...getEntries("liability", "monthly"),
+      ...getEntries(FinancialType.EXPENSE, "amount"),
+      ...getEntries(FinancialType.LIABILITY, "monthly"),
     ];
   }
-  if (financialType === "asset") {
-    entries = [...getEntries("asset", "cost")];
+  if (financialType === FinancialType.ASSET) {
+    entries = [...getEntries(FinancialType.ASSET, "cost")];
   }
-  if (financialType === "liability") {
-    entries = [...getEntries("liability", "principal")];
+  if (financialType === FinancialType.LIABILITY) {
+    entries = [...getEntries(FinancialType.LIABILITY, "principal")];
   }
 
   return (
@@ -101,10 +112,10 @@ function InOutBox({ financialType, style, size = 6 }) {
                 }
               >
                 {financialType === "income" &&
-                  getTotal("income", "amount") + getTotal("asset", "cashflow")}
+                  getTotal(FinancialType.INCOME, "amount") + getTotal(FinancialType.ASSET, "cashflow")}
                 {financialType === "expense" &&
-                  getTotal("expense", "amount") +
-                    getTotal("liability", "monthly")}
+                  getTotal(FinancialType.EXPENSE, "amount") +
+                getTotal(FinancialType.LIABILITY, "monthly")}
               </Tag>
             </Tag.Group>
           </Columns.Column>
@@ -113,15 +124,15 @@ function InOutBox({ financialType, style, size = 6 }) {
             size="1"
             style={{ width: "48px" }}
             onClick={() => {
-              setEntry({ financialType });
-              toggleShowModal();
+              setEntry!({ _type: financialType });
+              toggleShowModal!();
             }}
           >
             <FontAwesomeIcon icon={faPlus} size="xs" />
           </Columns.Column>
         </Columns>
 
-        {financials[financialType].length !== 0 && (
+        {(financials[financialType] as Financial[]).length !== 0 && (
           <Container className="has-background-grey-lighter mb-4">
             <Table>
               <thead>
@@ -144,8 +155,8 @@ function InOutBox({ financialType, style, size = 6 }) {
         <Modal
           show={showModal}
           onClose={() => {
-            setEntry({});
-            toggleShowModal();
+            setEntry!({});
+            toggleShowModal!();
           }}
           closeOnBlur={true}
           showClose={false}
@@ -154,19 +165,19 @@ function InOutBox({ financialType, style, size = 6 }) {
             <Section style={{ backgroundColor: "white" }}>
               <Container>
                 <Heading size={5} renderAs="p" style={{ padding: "0 2.5%" }}>
-                  {entry.id ? "Edit " : "New "}
-                  {entry.financialType}
+                  {entry!.id ? "Edit " : "New "}
+                  {entry!._type}
                   <Tag
                     remove
                     className="InOutBox-close-modal is-pulled-right"
                     onClick={() => {
-                      setEntry({});
-                      toggleShowModal();
+                      setEntry!({});
+                      toggleShowModal!();
                     }}
                   ></Tag>
                 </Heading>
 
-                <NewInOutForm />
+                <NewInOutForm reset={setEntry!}/>
               </Container>
             </Section>
           </Modal.Content>

@@ -1,5 +1,5 @@
 import React from "react";
-import InOutBox from "./InOutBox.js";
+import InOutBox from "./InOutBox";
 import "./FinancialStatement.css";
 import "./Icons.css";
 import "react-bulma-components/dist/react-bulma-components.min.css";
