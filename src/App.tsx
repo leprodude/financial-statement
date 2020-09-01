@@ -1,6 +1,7 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
-import FinancialStatement from "./FinancialStatement.js";
+// import { Route, Switch } from "react-router-dom";
+import FinancialStatement from "./FinancialStatement";
+import { FormModal } from "./FormModal";
 import { FinancialsProvider } from "./contexts/FinancialsContext";
 import { FormProvider } from "./contexts/FormContext";
 // import Statistics from "./Statistics";
@@ -11,12 +12,13 @@ interface AppProps {
   
 }
 
-export const App: React.FC<AppProps> = ({}) => {
+export const App: React.FC<AppProps> = () => {
     return (
       <div className="App">
         <FinancialsProvider>
           <FormProvider>
             <FinancialStatement/>
+            <FormModal />
             {/* <Switch>
               <Route exact path="/" component={FinancialStatement} />
               <Route

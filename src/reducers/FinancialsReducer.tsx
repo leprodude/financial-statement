@@ -1,40 +1,31 @@
-import { FinancialType, Financial, Financials } from "../FinancialTypes";
+import { Financial, IFinancials } from "../Financials";
 
 export type Actions = 
-  | { type: "ADD", financialType: FinancialType, newFinancial: Financial}
-  | { type: "REMOVE", financialType: FinancialType, id: string}
-  | { type: "EDIT", financialType: FinancialType, editedFinancial: Financial}
+  | { type: "ADD", financial: Financial}
+  | { type: "REMOVE", financial: Financial}
+  | { type: "EDIT", financial: Financial}
 
-type State = Financials;
+type State = IFinancials;
 
 const reducer = (state: State, action: Actions) => {
+  let financial: Financial = action.financial;
 
-  let financialType: FinancialType = action.financialType;
   switch (action.type) {
     case "ADD":
-      const newFinancial: Financial = action.newFinancial as Financial;
       return {
         ...state,
-        [financialType]: [
-          ...state[financialType],
-          {
-            // destructuring only uses arguments that get passed in
-            // different for income/asset/liability --> makes it awesomely general
-            ...newFinancial,
-          },
-        ],
+        [financial._type]: [...state[financial._type], {...financial}]
       };
     case "REMOVE":
       return {
         ...state,
-        [financialType]: (state[financialType] as Financial[]).filter((d) => d.id !== action.id),
+        [financial._type]: (state[financial._type] as Financial[]).filter((f) => f.id !== financial.id),
       };
     case "EDIT":
-      const editedFinancial = action.editedFinancial;
       return {
         ...state,
-        [financialType]: (state[financialType] as Financial[]).map((d: Financial) =>
-          d.id === editedFinancial.id ? { ...editedFinancial } : d
+        [financial._type]: (state[financial._type] as Financial[]).map((f) =>
+          f.id === financial.id ? { ...financial } : f
         ),
       };
     default:

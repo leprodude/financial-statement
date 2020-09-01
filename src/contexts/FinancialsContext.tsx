@@ -2,10 +2,10 @@ import React, { createContext } from "react";
 import FinancialsReducer from "../reducers/FinancialsReducer";
 import useLocalStorageReducer from "../hooks/useLocalStorageReducer";
 import { initialFinancials } from "../InitialFinancials";
-import { Financials} from "../FinancialTypes";
+import { IFinancials} from "../Financials";
 import { Actions } from "../reducers/FinancialsReducer";
 
-export const FinancialsContext = createContext<Partial<Financials>>({});
+export const FinancialsContext = createContext<Partial<IFinancials>>({});
 export const DispatchContext = createContext<Partial<React.Dispatch<Actions>>>({});
 
 export const FinancialsProvider: React.FC = (props) => {

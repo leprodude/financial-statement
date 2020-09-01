@@ -3,23 +3,27 @@ import InOutBox from "./InOutBox";
 import "./FinancialStatement.css";
 import "./Icons.css";
 import "react-bulma-components/dist/react-bulma-components.min.css";
+// @ts-ignore
 import { Section, Columns } from "react-bulma-components";
+import { FinancialType } from "./FinancialTypes";
 
-function FinancialStatement() {
+
+const FinancialStatement: React.FC = (props) => {
   return (
     <>
       <Section className="has-background-white-ter hero is-fullheight">
         <Columns centered className="is-multiline" breakpoint="tablet">
-          <InOutBox financialType="income"></InOutBox>
+
+          <InOutBox financialType={FinancialType.INCOME}></InOutBox>
           <Columns.Column size="full"></Columns.Column>
-          <InOutBox financialType="expense"></InOutBox>
+          
+          <InOutBox financialType={FinancialType.EXPENSE}></InOutBox>
           <Columns.Column size="full"></Columns.Column>
-          <InOutBox
-            financialType="asset"
-            size={5}
-          ></InOutBox>
+
+          <InOutBox financialType={FinancialType.ASSET} size={5}></InOutBox>
           <Columns.Column size="1"></Columns.Column>
-          <InOutBox financialType="liability" size={5}></InOutBox>
+
+          <InOutBox financialType={FinancialType.LIABILITY} size={5}></InOutBox>
         </Columns>
       </Section>
     </>
