@@ -1,0 +1,70 @@
+#CashflowPatterns {
+  padding: 2rem 0;
+}
+
+#CashflowPatterns .button {
+  opacity: 0;
+}
+
+@media screen and (min-width: 769px) {
+  #CashflowPatterns #buttons-column {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: space-evenly;
+        -ms-flex-pack: space-evenly;
+            justify-content: space-evenly;
+  }
+}
+
+#CashflowPatterns svg {
+  max-width: 500px;
+}
+
+#CashflowPatterns svg .box,
+#CashflowPatterns svg .box-text,
+#CashflowPatterns svg .arrow {
+  opacity: 0;
+}
+
+#CashflowPatterns svg #background {
+  fill: none;
+}
+
+#CashflowPatterns svg #colorShadow {
+  opacity: 0;
+}
+
+#CashflowPatterns svg #arrow-job {
+  opacity: 1;
+}
+
+#CashflowPatterns svg #arrow-job-path {
+  stroke-dasharray: 630;
+  stroke-dashoffset: 630;
+}
+
+#CashflowPatterns svg #arrow-middle-class-path {
+  stroke-dasharray: 1167;
+  stroke-dashoffset: 1167;
+}
+
+#CashflowPatterns svg #arrow-asset-1-path,
+#CashflowPatterns svg #arrow-asset-2-path {
+  stroke-dasharray: 575;
+  stroke-dashoffset: 575;
+}
+
+#CashflowPatterns svg #expense-box:hover,
+#CashflowPatterns svg #expense-text:hover,
+#CashflowPatterns svg #liability-box:hover,
+#CashflowPatterns svg #liability-text:hover,
+#CashflowPatterns svg #asset-box:hover,
+#CashflowPatterns svg #asset-text:hover {
+  cursor: pointer;
+}
+/*# sourceMappingURL=CashflowPatterns.css.map */

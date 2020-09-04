@@ -1,0 +1,55 @@
+#CashflowPatterns {
+  padding: 2rem 0;
+  .button {
+    opacity: 0;
+  }
+  #buttons-column {
+    @media screen and (min-width: 769px) {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+    }
+  }
+  svg {
+    max-width: 500px;
+
+    .box,
+    .box-text,
+    .arrow {
+      opacity: 0;
+    }
+    #background {
+      fill: none;
+    }
+    #colorShadow {
+      opacity: 0;
+    }
+    #arrow-job {
+      opacity: 1;
+    }
+    #arrow-job-path {
+      stroke-dasharray: 630;
+      stroke-dashoffset: 630;
+    }
+    #arrow-middle-class-path {
+      stroke-dasharray: 1167;
+      stroke-dashoffset: 1167;
+    }
+    #arrow-asset-1-path,
+    #arrow-asset-2-path {
+      stroke-dasharray: 575;
+      stroke-dashoffset: 575;
+    }
+
+    #expense-box,
+    #expense-text,
+    #liability-box,
+    #liability-text,
+    #asset-box,
+    #asset-text {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+.active {
+  position: relative;
+}
+
+.active:after {
+  content: "";
+  background: #4a4a4a;
+  position: absolute;
+  bottom: 0;
+  left: 45%;
+  right: 0%;
+  height: 1px;
+  width: 10%;
+}
+
+#logo {
+  width: 127px;
+}
+
+.navbar-end .buttons {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+/*# sourceMappingURL=Navigation.css.map */

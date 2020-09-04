@@ -21,6 +21,6 @@
   },
   "include": [
     "src",
-    "src/*"
+    "src/*", "public/CashflowPatternsAnimation.js"
   ]
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import InOutBox from "./InOutBox";
+import { FormModal } from "./FormModal";
 import "./FinancialStatement.css";
 import "./Icons.css";
 import "react-bulma-components/dist/react-bulma-components.min.css";
@@ -26,6 +27,7 @@ const FinancialStatement: React.FC = (props) => {
           <InOutBox financialType={FinancialType.LIABILITY} size={5}></InOutBox>
         </Columns>
       </Section>
+      <FormModal />
     </>
   );
 }
