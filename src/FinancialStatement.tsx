@@ -12,17 +12,17 @@ import { FinancialType } from "./FinancialTypes";
 const FinancialStatement: React.FC = (props) => {
   return (
     <>
-      <Section className="has-background-white-ter hero is-fullheight">
-        <Columns centered className="is-multiline" breakpoint="tablet">
+      <Section className="has-background-white-ter hero is-fullheight-with-navbar">
+        <Columns className="is-multiline FinancialStatementColumns" breakpoint="tablet">
 
-          <InOutBox financialType={FinancialType.INCOME}></InOutBox>
-          <Columns.Column size="full"></Columns.Column>
+          <InOutBox financialType={FinancialType.INCOME} size={5}></InOutBox>
+          {/* <Columns.Column size="full"></Columns.Column> */}
           
-          <InOutBox financialType={FinancialType.EXPENSE}></InOutBox>
-          <Columns.Column size="full"></Columns.Column>
+          <InOutBox financialType={FinancialType.EXPENSE} size={5}></InOutBox>
+          {/* <Columns.Column size="full"></Columns.Column> */}
 
           <InOutBox financialType={FinancialType.ASSET} size={5}></InOutBox>
-          <Columns.Column size="1"></Columns.Column>
+          {/* <Columns.Column size="1"></Columns.Column> */}
 
           <InOutBox financialType={FinancialType.LIABILITY} size={5}></InOutBox>
         </Columns>

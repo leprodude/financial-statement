@@ -18,11 +18,12 @@ import {
 interface InOutBoxProps {
   financialType: FinancialType,
   style?: Object,
+  offset?: number,
   size?: number
 }
 
 
-const InOutBox: React.FC<InOutBoxProps> = ({ financialType, style, size = 6 }) => {
+const InOutBox: React.FC<InOutBoxProps> = ({ financialType, style, size = 6, offset = 0 }) => {
 
   const financials = useContext(FinancialsContext);
   const { toggleShowModal, setEntry, setIsEditing } = useContext(
@@ -69,6 +70,7 @@ const InOutBox: React.FC<InOutBoxProps> = ({ financialType, style, size = 6 }) =
         size={size}
         className="has-background-white"
         style={style}
+        offset={offset}
       >
 
         {generateInOutBoxHeader()}
