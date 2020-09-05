@@ -23,7 +23,7 @@ interface InOutBoxProps {
 }
 
 
-const InOutBox: React.FC<InOutBoxProps> = ({ financialType, style, size = 6, offset = 0 }) => {
+const InOutBox: React.FC<InOutBoxProps> = ({ financialType, style = {}, size = 6, offset = 0 }) => {
 
   const financials = useContext(FinancialsContext);
   const { toggleShowModal, setEntry, setIsEditing } = useContext(
