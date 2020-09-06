@@ -89,7 +89,7 @@ export const animateAssetPattern = () => {
       targets: myPath2,
       strokeDashoffset: [1725, 575],
     },
-    "-=600"
+    "-=400"
   );
   asset.play();
 };
