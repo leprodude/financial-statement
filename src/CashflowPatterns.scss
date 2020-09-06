@@ -12,6 +12,10 @@
   }
   svg {
     max-width: 500px;
+    margin-top: -3rem;
+    @media screen and (min-width: 769px) {
+      margin-top: 0;
+    }
 
     .box,
     .box-text,
@@ -29,13 +33,16 @@
     }
     #arrow-job-path {
       stroke-dasharray: 630;
+      stroke-dashoffset: 1890;
     }
     #arrow-middle-class-path {
       stroke-dasharray: 1167;
+      stroke-dashoffset: 3501;
     }
     #arrow-asset-1-path,
     #arrow-asset-2-path {
       stroke-dasharray: 575;
+      stroke-dashoffset: 1725;
     }
 
     #expense-box,

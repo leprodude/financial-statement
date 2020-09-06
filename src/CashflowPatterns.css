@@ -23,6 +23,13 @@
 
 #CashflowPatterns svg {
   max-width: 500px;
+  margin-top: -3rem;
+}
+
+@media screen and (min-width: 769px) {
+  #CashflowPatterns svg {
+    margin-top: 0;
+  }
 }
 
 #CashflowPatterns svg .box,
@@ -45,18 +52,18 @@
 
 #CashflowPatterns svg #arrow-job-path {
   stroke-dasharray: 630;
-  stroke-dashoffset: 630;
+  stroke-dashoffset: 1890;
 }
 
 #CashflowPatterns svg #arrow-middle-class-path {
   stroke-dasharray: 1167;
-  stroke-dashoffset: 1167;
+  stroke-dashoffset: 3501;
 }
 
 #CashflowPatterns svg #arrow-asset-1-path,
 #CashflowPatterns svg #arrow-asset-2-path {
   stroke-dasharray: 575;
-  stroke-dashoffset: 575;
+  stroke-dashoffset: 1725;
 }
 
 #CashflowPatterns svg #expense-box:hover,
