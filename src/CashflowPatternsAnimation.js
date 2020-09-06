@@ -50,11 +50,8 @@ export const animateJobPattern = () => {
   });
   job.add({
     targets: myPath,
-    strokeDashoffset: -630,
+    strokeDashoffset: [1890, 630],
     duration: 1000,
-    complete: function (anim) {
-      myPath.style.strokeDashoffset = 630;
-    },
   });
   job.play();
 };
@@ -64,14 +61,12 @@ export const animateMiddleClassPattern = () => {
 
   let middleClass = anime({
     targets: myPath,
-    keyframes: [{ strokeDashoffset: 0 }, { strokeDashoffset: -1167 }],
+    // Safari doesn't like negative Dashoffset, so use 3x Dasharray as starting point
+    strokeDashoffset: [3501, 1167], 
     easing: "linear",
     duration: 1700,
     loop: false,
     autoplay: false,
-    complete: function (anim) {
-      myPath.style.strokeDashoffset = 1167;
-    },
   });
   middleClass.play();
 };
@@ -87,18 +82,12 @@ export const animateAssetPattern = () => {
   });
   asset.add({
     targets: myPath1,
-    keyframes: [{ strokeDashoffset: 0 }, { strokeDashoffset: -575 }],
-    complete: function (anim) {
-      myPath1.style.strokeDashoffset = 575;
-    },
+    strokeDashoffset: [1725, 575],
   });
   asset.add(
     {
       targets: myPath2,
-      keyframes: [{ strokeDashoffset: 0 }, { strokeDashoffset: -575 }],
-      complete: function (anim) {
-        myPath2.style.strokeDashoffset = 575;
-      },
+      strokeDashoffset: [1725, 575],
     },
     "-=600"
   );
