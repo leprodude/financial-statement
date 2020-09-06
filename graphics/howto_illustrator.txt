@@ -1,0 +1,4 @@
+- use artboard with option x:0 y:0 --> no transform property in export
+- export as... svg (with "use artboards" checked) (with object ids - layer names)
+- optimize in SVGOMG
+- use ids to add as many styles and attributes, so after a new export you can just copy paste and don't rely on manually added classes

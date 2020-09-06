@@ -19,18 +19,40 @@
 
     .box,
     .box-text,
-    .arrow {
+    .arrow,
+    #colorShadow,
+    #in-flow,
+    #out-flow,
+    #income-item-job,
+    #expense-item-bills,
+    #expense-item-consumption,
+    #expense-item-vacation,
+    #liability-item-mortgage,
+    #liability-item-big-toys,
+    #liability-item-credit-card,
+    #liability-item-debt,
+    #expense-item-payments,
+    #asset-item-business,
+    #asset-item-real-estate,
+    #asset-item-intellectual-property,
+    #income-item-business,
+    #income-item-rental,
+    #income-item-dividends,
+    #income-item-royalties {
       opacity: 0;
     }
     #background {
       fill: none;
     }
-    #colorShadow {
-      opacity: 0;
+
+    #arrow-asset-1-path,
+    #arrow-asset-2-path {
+      fill: none;
+      stroke: #000000;
+      stroke-miterlimit: 10;
+      stroke-width: 10;
     }
-    #arrow-job {
-      opacity: 1;
-    }
+
     #arrow-job-path {
       stroke-dasharray: 630;
       stroke-dashoffset: 1890;
@@ -39,21 +61,34 @@
       stroke-dasharray: 1167;
       stroke-dashoffset: 3501;
     }
-    #arrow-asset-1-path,
+    #arrow-asset-1-path {
+      stroke-dasharray: 460;
+      stroke-dashoffset: (460*3);
+    }
     #arrow-asset-2-path {
-      stroke-dasharray: 575;
-      stroke-dashoffset: 1725;
+      stroke-dasharray: 456;
+      stroke-dashoffset: (456*3);
     }
 
-    #expense-box,
-    #expense-text,
-    #liability-box,
-    #liability-text,
-    #asset-box,
-    #asset-text {
-      &:hover {
-        cursor: pointer;
-      }
+    .expense-item,
+    #out-flow,
+    #liability-item-mortgage,
+    #liability-item-big-toys,
+    #liability-item-credit-card,
+    #liability-item-debt,
+    #expense-item-payments {
+      fill: #ff3860;
+    }
+    .income-item,
+    #in-flow,
+    #asset-item-business,
+    #asset-item-real-estate,
+    #asset-item-intellectual-property,
+    #income-item-business,
+    #income-item-rental,
+    #income-item-dividends,
+    #income-item-royalties {
+      fill: #48c774;
     }
   }
 }
