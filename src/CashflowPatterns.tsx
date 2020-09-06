@@ -28,7 +28,7 @@ const CashflowPatterns: React.FC<CashflowPatternsProps> = ({ match }) => {
                 </Columns.Column>
                 <Columns.Column className="is-full-mobile is-half-tablet has-text-left-tablet">
 
-                    <svg id="financial_statement" data-name="financial statement" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 672 853.84">
+                    <svg id="financial_statement" data-name="financial statement" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 853.84">
                         <defs>
                             <filter id="blurFilter">
                                 {/* stdDeviation is amount of blur */}
