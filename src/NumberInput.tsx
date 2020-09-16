@@ -25,7 +25,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
     <div className="field is-inline-block">
       {visible && (
         <>
-          <label className="label">{label}</label>
+          <label className="label" htmlFor={name}>{label}</label>
           <div className="control">
             <input
               type="text"

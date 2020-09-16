@@ -38,6 +38,9 @@ export const FormModal: React.FC<FormModalProps> = () => {
                             <Heading size={5} renderAs="p" style={{ padding: "0 2.5%" }}>
                                 {isEditing ? `Edit ${entry!._type}` : `New ${entry!._type}`}
                                 <Tag
+                                    role="button"
+                                    name="close"
+                                    aria-label="close form"
                                     remove
                                     className="InOutBox-close-modal is-pulled-right"
                                     onClick={() => {

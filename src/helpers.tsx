@@ -9,7 +9,7 @@ import {
 export function generateNewFinancial(type: FinancialType): Financial {
     let f: IBaseFinancial = {
         _type: type,
-        id: uuidv4(),
+        _id: uuidv4(),
         name: "",
         cashflow: 0,
     }
@@ -31,6 +31,50 @@ export function generateNewFinancial(type: FinancialType): Financial {
     }
 }
 
+export function generateTableData(financial: Financial, columnData: string, tags?: JSX.Element | JSX.Element[]): JSX.Element[] {
+    let data: JSX.Element[] = [];
+    data.push(<td key={uuidv4()}>{financial.name + " "}{tags}</td>);
+    data.push(<td key={uuidv4()}
+        className={
+            (financial._type === FinancialType.EXPENSE || financial._type === FinancialType.LIABILITY) ?
+                "has-text-danger" : undefined
+        }
+    >{financial[columnData as keyof Financial]}</td>);
+
+    return data;
+}
+
+export function generateTableRows(p: GetTableEntriesProps, typeToGen: FinancialType): JSX.Element[];
+export function generateTableRows(p: GetTableEntriesProps, typeToGen: FinancialType, columnData: keyof Financial): JSX.Element[];
+export function generateTableRows(p: GetTableEntriesProps, typeToGen: FinancialType, tags: JSX.Element | JSX.Element[]): JSX.Element[];
+export function generateTableRows(p: GetTableEntriesProps, typeToGen: FinancialType, columnData: keyof Financial, tags: JSX.Element | JSX.Element[]): JSX.Element[];
+export function generateTableRows(p: GetTableEntriesProps, typeToGen: FinancialType, columnOrTags: any = "cashflow", tags?: JSX.Element | JSX.Element[]): JSX.Element[] {
+
+    const { financials, toggleShowModal, setEntry, setIsEditing } = { ...p };
+
+    let columnData: any;
+
+    if (columnOrTags && typeof columnOrTags === "string") {
+        columnData = columnOrTags;
+    } else if (columnOrTags) {
+        columnData = "cashflow";
+        tags = columnOrTags
+    }
+
+    const rows = (financials[typeToGen] as Financial[]).map((f) => (
+        <tr key={uuidv4()}
+            onClick={() => {
+                setIsEditing!(true);
+                setEntry!(f);
+                toggleShowModal!();
+            }}
+            className="InOutBox-hover"
+        >
+            {generateTableData(f, columnData, tags)}</tr>
+    ));
+    return rows;
+};
+
 interface GetTableEntriesProps {
     type: FinancialType,
     financials: IFinancials,
@@ -39,71 +83,23 @@ interface GetTableEntriesProps {
     setIsEditing: React.Dispatch<React.SetStateAction<boolean | undefined>> | undefined
 }
 
-export function getTableEntries(props: GetTableEntriesProps): JSX.Element[] {
-    const { type, financials, toggleShowModal, setEntry, setIsEditing } = { ...props };
-
-    function generateTableRows(type: FinancialType): JSX.Element[];
-    function generateTableRows(type: FinancialType, columnData: keyof Financial): JSX.Element[];
-    function generateTableRows(type: FinancialType, tags: JSX.Element | JSX.Element[]): JSX.Element[];
-    function generateTableRows(type: FinancialType, columnData: keyof Financial, tags: JSX.Element | JSX.Element[]): JSX.Element[];
-    function generateTableRows(type: FinancialType, columnOrTags: any = "cashflow", tags?: JSX.Element | JSX.Element[]): JSX.Element[] {
-
-        let columnData: any;
-
-        if (columnOrTags && typeof columnOrTags === "string") {
-            columnData = columnOrTags;
-        } else if (columnOrTags) {
-            columnData = "cashflow";
-            tags = columnOrTags
-        }
-
-        const rows = (financials[type] as Financial[]).map((f) => (
-            <tr
-                onClick={() => {
-                    setIsEditing!(true);
-                    setEntry!(f);
-                    toggleShowModal!();
-                }}
-                className="InOutBox-hover"
-            >
-                {generateTableData(f, columnData, tags)}</tr>
-        ));
-        return rows;
-    };
-    function generateTableData(financial: Financial, columnData: string, tags?: JSX.Element | JSX.Element[]): JSX.Element[] {
-        let data: JSX.Element[] = [];
-        data.push(<td>{financial.name} {tags}</td>);
-        data.push(<td
-            className={
-                (financial._type === FinancialType.EXPENSE || financial._type === FinancialType.LIABILITY) ?
-                    "has-text-danger" : undefined
-            }
-        >
-            {financial[columnData as keyof Financial]}
-        </td>);
-
-        return data;
+export function assembleTableRows(props: GetTableEntriesProps): JSX.Element[] {
+    switch (props.type) {
+        case FinancialType.INCOME:
+            return [
+                ...generateTableRows(props, FinancialType.INCOME),
+                ...generateTableRows(props, FinancialType.ASSET, "cashflow", <Tag className="InOutBox-passive-tag is-success is-light">passive</Tag>),
+            ];
+        case FinancialType.EXPENSE:
+            return [
+                ...generateTableRows(props, FinancialType.EXPENSE),
+                ...generateTableRows(props, FinancialType.LIABILITY, <Tag className="InOutBox-passive-tag is-danger is-light">liability</Tag>),
+            ];
+        case FinancialType.ASSET:
+            return [...generateTableRows(props, FinancialType.ASSET, "cost" as keyof Financial)];
+        case FinancialType.LIABILITY:
+            return [...generateTableRows(props, FinancialType.LIABILITY, "principal" as keyof Financial)];
     }
-    function generateTableEntries() {
-        switch (type) {
-            case FinancialType.INCOME:
-                return [
-                    ...generateTableRows(FinancialType.INCOME),
-                    ...generateTableRows(FinancialType.ASSET, "cashflow", <Tag className="InOutBox-passive-tag is-success is-light">passive</Tag>),
-                ];
-            case FinancialType.EXPENSE:
-                return [
-                    ...generateTableRows(FinancialType.EXPENSE),
-                    ...generateTableRows(FinancialType.LIABILITY, <Tag className="InOutBox-passive-tag is-danger is-light">liability</Tag>),
-                ];
-            case FinancialType.ASSET:
-                return [...generateTableRows(FinancialType.ASSET, "cost" as keyof Financial)];
-            case FinancialType.LIABILITY:
-                return [...generateTableRows(FinancialType.LIABILITY, "principal" as keyof Financial)];
-        }
-    }
-
-    return generateTableEntries();
 }
 
 export function calculateTotal(financials: Financial[], columnData: keyof Financial = "cashflow"): number {

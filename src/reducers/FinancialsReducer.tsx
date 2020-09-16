@@ -19,13 +19,13 @@ const reducer = (state: State, action: Actions) => {
     case "REMOVE":
       return {
         ...state,
-        [financial._type]: (state[financial._type] as Financial[]).filter((f) => f.id !== financial.id),
+        [financial._type]: (state[financial._type] as Financial[]).filter((f) => f._id !== financial._id),
       };
     case "EDIT":
       return {
         ...state,
         [financial._type]: (state[financial._type] as Financial[]).map((f) =>
-          f.id === financial.id ? { ...financial } : f
+          f._id === financial._id ? { ...financial } : f
         ),
       };
     default:

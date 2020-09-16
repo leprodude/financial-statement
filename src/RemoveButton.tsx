@@ -1,11 +1,11 @@
 import React from "react"
 
 interface RemoveButtonProps {
-    text: string,
+    text?: string,
     handleRemove: (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
 
-export const RemoveButton: React.FC<RemoveButtonProps> = ({ text, handleRemove }) => {
+export const RemoveButton: React.FC<RemoveButtonProps> = ({ text = "Remove", handleRemove }) => {
     return (
         <div className="field is-inline-block">
             <div className="control has-text-right">

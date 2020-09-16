@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { FinancialsContext } from "./contexts/FinancialsContext";
 import { FormContext } from "./contexts/FormContext";
 import { FinancialType, Financial, IFinancials } from "./Financials";
-import { getTableEntries, generateNewFinancial, calculateTotal } from "./helpers"
+import { assembleTableRows, generateNewFinancial, calculateTotal } from "./helpers"
 import "./InOutBox.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -23,7 +23,7 @@ interface InOutBoxProps {
 }
 
 
-const InOutBox: React.FC<InOutBoxProps> = ({ financialType, style = {}, size = 6, offset = 0 }) => {
+const InOutBox: React.FC<InOutBoxProps> = ({ financialType, style = {}, size = 6, offset = null }) => {
 
   const financials = useContext(FinancialsContext);
   const { toggleShowModal, setEntry, setIsEditing } = useContext(
@@ -34,10 +34,11 @@ const InOutBox: React.FC<InOutBoxProps> = ({ financialType, style = {}, size = 6
     return (
       <Container style={{ padding: "0.8rem 0.8rem 0.8rem 0"}}>
         <Columns className="is-mobile">
-          <Columns.Column size="auto" className="has-text-left">
+          <Columns.Column className="has-text-left">
             <Tag.Group gapless>
-              <Tag color="black">{financialType}</Tag>
+              <Tag color="black" className="InOutBox-title">{financialType}</Tag>
               <Tag
+              data-testid="InOutBox-sum"
                 color={
                   financialType === "expense" || financialType === "liability"
                     ? "danger"
@@ -54,8 +55,10 @@ const InOutBox: React.FC<InOutBoxProps> = ({ financialType, style = {}, size = 6
           </Columns.Column>
           <Columns.Column
             className="InOutBox-hover has-text-center"
-            size="1"
+            size={1}
             style={{ width: "48px"}}
+            data-testid="add entry"
+            aria-label={`add ${financialType}`}
             onClick={() => {
               setEntry!(generateNewFinancial(financialType));
               toggleShowModal!();
@@ -97,7 +100,7 @@ const InOutBox: React.FC<InOutBoxProps> = ({ financialType, style = {}, size = 6
                     </th>
                   </tr>
                 </thead>
-                <tbody>{getTableEntries({ type: financialType, financials: financials as IFinancials, toggleShowModal, setEntry, setIsEditing })}</tbody>
+                <tbody>{assembleTableRows({ type: financialType, financials: financials as IFinancials, toggleShowModal, setEntry, setIsEditing })}</tbody>
               </Table>
             </Container>
           )}

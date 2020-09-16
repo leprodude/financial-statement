@@ -68,7 +68,7 @@ const NewInOutForm: React.FC<NewInOutFormProps> = ({ reset }) => {
     <>
       <form className="NewInOutForm" onSubmit={handleSubmit}>
         <div className="field is-inline-block">
-          <label className="label">Name</label>
+          <label className="label" htmlFor="name">Name</label>
 
           <div className="control">
             <input
@@ -113,10 +113,10 @@ const NewInOutForm: React.FC<NewInOutFormProps> = ({ reset }) => {
         {financialType === FinancialType.LIABILITY && (
           <>
             <div className="field is-inline-block">
-              <label className="label">Cashflow</label>
+              <label className="label" htmlFor="cashflow">Cashflow</label>
 
               <div className="control">
-                <label className="label">
+                <label className="label" data-testid="cashflow-generated">
                   {principal && interest
                     ? Number(-((principal as number * (interest as number)) / 12).toFixed(2))
                     : "0"}

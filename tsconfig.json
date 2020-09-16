@@ -17,10 +17,11 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
   },
   "include": [
     "src",
-    "src/*", "public/CashflowPatternsAnimation.js"
+    "src/*", 
+    "public/CashflowPatternsAnimation.js"
   ]
 }
