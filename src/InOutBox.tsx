@@ -70,23 +70,39 @@ const InOutBox: React.FC<InOutBoxProps> = ({ financialType, style = {}, size = 6
       </Container>)
   }
 
+  function shouldDisplay(): boolean {
+    let entryCount;
+    switch(financialType) {
+      case FinancialType.INCOME:
+        entryCount = (financials[FinancialType.INCOME]?.length! + financials[FinancialType.ASSET]?.length!)
+        return (entryCount > 0);
+      case FinancialType.EXPENSE:
+        entryCount = (financials[FinancialType.EXPENSE]?.length! + financials[FinancialType.LIABILITY]?.length!)
+        return (entryCount > 0);
+      case FinancialType.ASSET:
+        entryCount = financials[FinancialType.ASSET]?.length!
+        return (entryCount > 0);
+      case FinancialType.LIABILITY:
+        entryCount = financials[FinancialType.LIABILITY]?.length!
+        return (entryCount > 0);
+    }
+  }
+
   return (
     <>
       <Columns.Column
         size={size}
-        // className="has-background-white"
         style={style}
         offset={offset}
       >
-        {/* <div className="has-background-white"> */}
-        {/* <Container className="InOutBox-container" style={{padding: "0.5rem"}}> */}
         <Container className="InOutBox-container">
 
 
 
           {generateInOutBoxHeader()}
 
-          {(financials[financialType] as Financial[]).length !== 0 && (
+
+          { shouldDisplay() && (
             <Container className="has-background-grey-lighter mb-4">
               <Table>
                 <thead>

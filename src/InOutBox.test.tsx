@@ -36,6 +36,18 @@ test("renders correct number of table body rows (INCOME)", () => {
         expect(screen.queryByText(el.name)).toBeInTheDocument()
     });
 })
+test("renders correct number of table body rows (INCOME) when only passive income", () => {
+    let financials = JSON.parse(JSON.stringify(InitialFinancials));
+    financials.income = [];
+
+    render(<FinancialsContext.Provider value={financials}>
+        <InOutBox financialType={FinancialType.INCOME}/>
+    </FinancialsContext.Provider>);
+
+    InitialFinancials[FinancialType.ASSET].forEach(el => {
+        expect(screen.queryByText(el.name)).toBeInTheDocument()
+    });
+})
 
 test("renders correct number of table body rows (ASSET)", () => {
     renderWithProviders(<InOutBox financialType={FinancialType.ASSET} />)
@@ -46,8 +58,6 @@ test("renders correct number of table body rows (ASSET)", () => {
 })
 
 test("fires click event on table body row", () => {
-    // const providerProps = {
-    // }
     
     const financials = InitialFinancials;
     const dispatch = jest.fn();
