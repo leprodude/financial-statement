@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from "react-router-dom";
-import './index.css';
+import 'css/index.scss';
 import App from './App';
 import { FinancialsProvider } from "./contexts/FinancialsContext";
 import { FormProvider } from "./contexts/FormContext";

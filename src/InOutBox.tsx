@@ -3,7 +3,7 @@ import { FinancialsContext } from "./contexts/FinancialsContext";
 import { FormContext } from "./contexts/FormContext";
 import { FinancialType, Financial, IFinancials } from "./Financials";
 import { assembleTableRows, generateNewFinancial, calculateTotal } from "./helpers"
-import "./InOutBox.css";
+import "css/InOutBox.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import {

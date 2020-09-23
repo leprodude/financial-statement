@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import FinancialStatement from "./FinancialStatement";
 import CashflowPatterns from './CashflowPatterns'
 import Navigation from './Navigation'
-import "./App.css";
+import "css/App.scss";
 
 interface AppProps {
 

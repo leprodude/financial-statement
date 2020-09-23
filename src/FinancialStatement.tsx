@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import InOutBox from "./InOutBox";
 import { FormModal } from "./FormModal";
-import "./FinancialStatement.css";
-import "./Icons.css";
+import "css/FinancialStatement.scss";
+import "css/Icons.scss";
 import { revealElements } from "./FinancialStatementAnimation"
 import "react-bulma-components/dist/react-bulma-components.min.css";
 // @ts-ignore

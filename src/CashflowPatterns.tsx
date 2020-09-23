@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { RouteComponentProps } from "react-router-dom"
 import { revealElements, animateJobPattern, animateMiddleClassPattern, animateAssetPattern } from "./CashflowPatternsAnimation"
-import "./CashflowPatterns.css"
+import "css/CashflowPatterns.scss"
 // @ts-ignore
 import { Section, Columns, Button } from "react-bulma-components";
 

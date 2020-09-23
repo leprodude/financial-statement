@@ -3,7 +3,7 @@ import useInputState from "./hooks/useInputState";
 import { DispatchContext } from "./contexts/FinancialsContext";
 import { FormContext } from "./contexts/FormContext";
 import NumberInput from "./NumberInput";
-import "./NewInOutForm.css";
+import "css/NewInOutForm.scss";
 import { Actions } from "./reducers/FinancialsReducer";
 import { Financial, FinancialType, IAsset, ILiability } from "./Financials";
 import { SubmitButton } from "./SubmitButton";
